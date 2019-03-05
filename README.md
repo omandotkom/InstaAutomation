@@ -22,11 +22,6 @@ InstaAutomation adalah perangkat lunak berbasis Java yang dikembangkan menggunak
 - Filter untuk follow / tidak follow akun dengan jumlah follower tertentu (dari akun target)
 - Pembuatan analisa laporan scraping pengikut akun target dalam format .csv (experimental)
 
-### Tech
-
-And of course Dillinger itself is open source with a [public repository][dill]
- on GitHub.
-
 ### Software Requirement
 InstaAutomation membutuhkan : 
 1. Java 8 (JRE), untuk proses instalasi Java 8, silahkan merujuk ke link berikut https://www.java.com/en/download/help/download_options.xml
