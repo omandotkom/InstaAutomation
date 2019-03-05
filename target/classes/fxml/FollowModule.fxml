@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.control.RadioMenuItem?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="598.0" prefWidth="778.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.dotlab.software.instaautomation.UI.homepage.FollowModuleController">
+   <children>
+      <TabPane layoutX="14.0" layoutY="68.0" prefHeight="502.0" prefWidth="756.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Hashtag">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="305.0" prefWidth="756.0">
+                     <children>
+                        <GridPane gridLinesVisible="true" layoutX="14.0" layoutY="20.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.0" minWidth="0.0" prefWidth="102.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="478.0" minWidth="10.0" prefWidth="248.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="457.0" minWidth="10.0" prefWidth="367.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="71.0" minHeight="2.0" prefHeight="31.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="154.0" minHeight="9.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="198.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label text="Parameter" />
+                              <TextField fx:id="txtFollowHashtag" promptText="#adventure" GridPane.columnIndex="1" />
+                              <Label text="Jumlah Follow" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtJumlahFollowHashtag" promptText="50" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <children>
+                                    <Button fx:id="btnFollowMulaiHashtag" mnemonicParsing="false" text="Mulai" />
+                                    <Button fx:id="btnFollowBerhentiHashtag" mnemonicParsing="false" onAction="#btnFollowBerhentiAction" text="Berhenti" />
+                                 </children>
+                              </HBox>
+                              <CheckBox fx:id="checkLikeHashtag" mnemonicParsing="false" text="Sukai Foto" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                           </children>
+                        </GridPane>
+                        <TextArea fx:id="txtFollowLogHashtag" editable="false" layoutX="14.0" layoutY="141.0" prefHeight="320.0" prefWidth="719.0" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Account">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <GridPane gridLinesVisible="true" layoutX="14.0" layoutY="19.0" prefHeight="102.0" prefWidth="385.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="232.0" minWidth="0.0" prefWidth="141.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="600.0" minWidth="10.0" prefWidth="244.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints maxHeight="71.0" minHeight="2.0" prefHeight="31.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="154.0" minHeight="9.0" prefHeight="37.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="198.0" minHeight="10.0" prefHeight="39.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label text="Akun" />
+                              <TextField fx:id="txtFollowAccount" promptText="omandotkom.jpg" GridPane.columnIndex="1" />
+                              <Label text="Jumlah Follow" GridPane.rowIndex="1" />
+                              <TextField fx:id="txtJumlahFollowAccount" promptText="50" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                 <children>
+                                    <Button fx:id="btnFollowMulaiAccount" mnemonicParsing="false" onAction="#btnFollowMulaiAccountonAction" text="Mulai" />
+                                    <Button fx:id="btnFollowBerhentiAccount" mnemonicParsing="false" onAction="#btnFollowBerhentiAccountonAction" text="Berhenti" />
+                                 </children>
+                              </HBox>
+                           </children>
+                        </GridPane>
+                        <ListView fx:id="listViewAkun" layoutX="14.0" layoutY="158.0" prefHeight="305.0" prefWidth="200.0" />
+                        <Label layoutX="14.0" layoutY="137.0" text="Daftar Pengikut : " />
+                        <TextArea fx:id="txtFollowByAccountLog" editable="false" layoutX="230.0" layoutY="158.0" prefHeight="284.0" prefWidth="504.0" />
+                        <Label layoutX="230.0" layoutY="137.0" text="Aktifitas" />
+                        <Label fx:id="totalScraped" layoutX="129.0" layoutY="137.0" text="Label" />
+                        <TitledPane animated="false" layoutX="412.0" layoutY="19.0" prefHeight="103.0" prefWidth="333.0" text="Pengaturan">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="62.0" prefWidth="200.0">
+                                 <children>
+                                    <CheckBox fx:id="checkFollowAccountAll" layoutX="1.0" layoutY="16.0" mnemonicParsing="false" onAction="#checkFollowAccountAllonAction" text="Semua Follower" />
+                                    <CheckBox fx:id="checkFollowPrivateAccount" layoutX="1.0" layoutY="38.0" mnemonicParsing="false" text="Ikuti Akun Privat" />
+                                    <CheckBox fx:id="checkRequestedAccount" disable="true" layoutX="146.0" layoutY="16.0" mnemonicParsing="false" text="Requested" />
+                                    <CheckBox fx:id="checkSettingMaxFollowerAccount" layoutX="146.0" layoutY="38.0" mnemonicParsing="false" onAction="#checkSettingMaxFolloweronAction" text="Maximum Follower" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </TitledPane>
+                        <Label fx:id="lblTotalAccount" layoutX="230.0" layoutY="447.0" text="0" />
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+            <Tab fx:id="tabCleaner" onSelectionChanged="#tabCleanerSelectionChanged" text="Cleaner">
+              <content>
+                <AnchorPane fx:id="panelCleaner" minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="14.0" layoutY="32.0" text="Akun :" />
+                        <TextField fx:id="txtAccountCleaner" editable="false" layoutX="65.0" layoutY="27.0" />
+                        <ListView fx:id="listViewAkunCleaner" layoutX="14.0" layoutY="80.0" prefHeight="378.0" prefWidth="227.0" />
+                        <TitledPane animated="false" layoutX="248.0" layoutY="80.0" prefHeight="152.0" prefWidth="261.0" text="Pengaturan">
+                          <content>
+                            <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="143.0" prefWidth="244.0">
+                                 <children>
+                                    <CheckBox fx:id="chkBukanPengikutCleaner" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" text="Bukan pengikut" />
+                                    <CheckBox fx:id="chkAkunTidakAktifCleaner" layoutX="14.0" layoutY="39.0" mnemonicParsing="false" text="Akun tidak aktif" />
+                                    <CheckBox fx:id="chkFollowingMorethanFollowerCleaner" layoutX="14.0" layoutY="64.0" mnemonicParsing="false" text="Akun Following &gt; Follower" />
+                                    <CheckBox fx:id="chkAkunDenganPengikutMoreThan" layoutX="14.0" layoutY="90.0" mnemonicParsing="false" text="Akun dengan pengikut &gt; dari" />
+                                 </children>
+                              </AnchorPane>
+                          </content>
+                        </TitledPane>
+                        <TextArea fx:id="txtLogCleaner" editable="false" layoutX="248.0" layoutY="240.0" prefHeight="215.0" prefWidth="497.0" />
+                        <Button fx:id="btnMulaiCleaner" layoutX="248.0" layoutY="27.0" mnemonicParsing="false" onAction="#btnMulaiCleaneronAction" text="Mulai" />
+                        <Button fx:id="btnBerhentiCleaner" layoutX="311.0" layoutY="27.0" mnemonicParsing="false" onAction="#btnBerhentiCleaneronAction" text="Berhenti" />
+                        <Label layoutX="17.0" layoutY="64.0" text="Total : " />
+                        <Label fx:id="lblTotalAccountCleaner" layoutX="63.0" layoutY="64.0" text="0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+        </tabs>
+      </TabPane>
+      <MenuBar prefHeight="29.0" prefWidth="766.0">
+         <menus>
+            <Menu mnemonicParsing="false" text="Aplikasi">
+               <items>
+                  <MenuItem fx:id="menuPengaturan" mnemonicParsing="false" text="Pengaturan" />
+                  <MenuItem mnemonicParsing="false" text="Keluar" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Edit">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Delete" />
+               </items>
+            </Menu>
+            <Menu fx:id="mnKontrolTugas" mnemonicParsing="false" text="Kontrol Tugas">
+               <items>
+                  <MenuItem mnemonicParsing="false" text="Kendali" />
+                  <RadioMenuItem mnemonicParsing="false" text="Tutup Aplikasi" />
+                  <RadioMenuItem mnemonicParsing="false" text="Sleep" />
+                  <RadioMenuItem fx:id="rbThreadShutdown" mnemonicParsing="false" text="Matikan Komputer" />
+               </items>
+            </Menu>
+         </menus>
+      </MenuBar>
+   </children>
+</AnchorPane>

@@ -1,0 +1,9 @@
+{
+	"validation": "61a78b6297c33bba4c3d8e4825444de5afc0c3c15ddd33fd8b2482945bacffac",
+	"version": "1",
+	"likeInterval": "15,13,25,20,19",
+    "followInterval" : "40,35,50,60",
+	"commentInterval": "30,90",
+    "dbpath" : "/home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/target/main.db",
+    "likeButton" : "coreSpriteHeartOpen"
+}

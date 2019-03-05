@@ -1,0 +1,17 @@
+https://www.instagram.com/graphql/query/?query_hash=c409f8bda63382c86db99f2a2ea4a9b2
+
+tu untun berandaa
+
+https://www.instagram.com/graphql/query/?query_hash=c409f8bda63382c86db99f2a2ea4a9b2
+
+
+scrap follower
+Kesimpulan : 
+1. Untuk query hash tetap sama di satu akun yang login
+https://www.instagram.com/graphql/query/?query_hash=56066f031e6239f35a904ac20c9f37d9&variables={%22id%22:%222107726946%22,%22include_reel%22:true,%22fetch_mutual%22:false,%22first%22:1000}
+
+query hash itu dinamik
+id: itu targetnya
+mutual di false
+first itu max per paging
+
