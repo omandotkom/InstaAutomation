@@ -16,7 +16,7 @@ import org.json.JSONException;
  * @author omandotkom
  */
 public class ConfigParser extends Parser {
-
+/*
     private Config config = new Config();
 
     public Config getConfig() {
@@ -58,7 +58,7 @@ public class ConfigParser extends Parser {
         }
         return result;
     }
-
+*/
     @Override
     public boolean isHas_next_page() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
@@ -76,6 +76,11 @@ public class ConfigParser extends Parser {
 
     @Override
     public ArrayList<Post> getPostList() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    @Override
+    public void parse() {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

@@ -5,6 +5,7 @@
  */
 package com.dotlab.software.instaautomation.Settings;
 
+import com.dotlab.software.instaautomation.Reporter.CSVReport;
 import java.util.prefs.*;
 import com.dotlab.software.instaautomation.Scrapper.Entities.User;
 import com.dotlab.software.instaautomation.Scrapper.Parser.ConfigParser;
@@ -19,6 +20,7 @@ import java.io.FileReader;
 import com.dotlab.software.instaautomation.Scrapper.Parser.ConfigParser;
 import java.io.FileWriter;
 import java.io.RandomAccessFile;
+import java.net.URISyntaxException;
 import java.nio.channels.FileChannel;
 import java.nio.channels.FileLock;
 import java.nio.channels.OverlappingFileLockException;
@@ -40,6 +42,10 @@ public class ApplicationSettings {
     private final String PREF_CHROMEDRIVERPATH = "chrome_driver_path";
     private final String PREF_CONFIG_PATH = "config";
 
+    private final String PREF_LIKE_INTERVAL = "likeInterval";
+    private final String PREF_COMMENT_INTERVAL = "commentInterval";
+    private final String PREF_FOLLOW_INTERVAL = "followInterval";
+    private final String PREF_LIKE_BUTTTON = "likeButton";
     private static Preferences prefs;
 
     public ApplicationSettings() {
@@ -49,6 +55,26 @@ public class ApplicationSettings {
     public void saveUser(User user) {
         prefs.put(PREF_USERNAME, user.getUsername());
         prefs.put(PREF_PASSORD, user.getPassword());
+    }
+
+    public void saveLikeInterval(String likeInterval) {
+        prefs.put(PREF_LIKE_INTERVAL, likeInterval);
+    }
+
+    public String getLikeInterval() {
+        return prefs.get(PREF_LIKE_INTERVAL, "15,13,25,20,19");
+    }
+
+    public void saveCommentInterval(String commentInterval) {
+        prefs.put(PREF_COMMENT_INTERVAL, commentInterval);
+    }
+
+    public void saveFollowInterval(String followInterval) {
+        prefs.put(PREF_FOLLOW_INTERVAL, followInterval);
+    }
+
+    public String geetFollowInterval() {
+        return prefs.get(PREF_FOLLOW_INTERVAL, "40,35,50,60");
     }
 
     public void saveConfigPath(String path) {
@@ -66,8 +92,16 @@ public class ApplicationSettings {
         return user;
     }
 
-    public String getChromeDriverPath() {
-        return prefs.get(this.PREF_CHROMEDRIVERPATH, "");
+    public String getLikeButton() {
+        return prefs.get(PREF_LIKE_BUTTTON, "coreSpriteHeartOpen");
+    }
+    public void saveLikeButton(String name){
+    prefs.put(PREF_LIKE_BUTTTON, name);
+    }
+
+    public String getChromeDriverPath() throws IOException, URISyntaxException {
+        //   return prefs.get(this.PREF_CHROMEDRIVERPATH, "");
+        return CSVReport.getJarPath() + "/chromedriver";
     }
 
     public void setChromeDriverPath(String path) {
@@ -82,7 +116,23 @@ public class ApplicationSettings {
         }
     }
 
-    public boolean saveConfiguration() throws IOException {
+    public boolean isConfigValid() {
+        try {
+            File file = new File(getChromeDriverPath());
+            if (file.exists()) {
+                return true;
+            }
+        } catch (IOException ex) {
+            return false;
+            //Logger.getLogger(ApplicationSettings.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
+            return false;
+            //Logger.getLogger(ApplicationSettings.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
+    }
+
+    /*   public boolean saveConfiguration() throws IOException {
         String filePath = getConfigPath();
 
         org.json.simple.JSONObject jso = new org.json.simple.JSONObject();
