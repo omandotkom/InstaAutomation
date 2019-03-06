@@ -14,6 +14,10 @@ import com.dotlab.software.instaautomation.Settings.ApplicationSettings;
  * @author omandotkom
  */
 public class AutoStatic {
+
+    /**
+     *
+     */
     public static Automation AUTOMATION = new Automation();
     public static  User LOGGED_USER = new User();
     public static ApplicationSettings SETTINGS = new ApplicationSettings();
