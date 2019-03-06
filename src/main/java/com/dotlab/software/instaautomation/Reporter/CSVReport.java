@@ -43,7 +43,7 @@ public abstract class CSVReport {
         return formattedDate;
     }
 
-    private String getJarPath() throws IOException, URISyntaxException {
+    public static String getJarPath() throws IOException, URISyntaxException {
         return new File(MainFX.class.getProtectionDomain().getCodeSource().getLocation()
                 .toURI()).getParent();
     }

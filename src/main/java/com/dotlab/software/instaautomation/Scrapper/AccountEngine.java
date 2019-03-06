@@ -350,16 +350,6 @@ public class AccountEngine extends Engine {
         System.out.println("Successfully gather " + postList.size() + " media from " + followEngineSetting.getTargetAccount());
     }
 
-    private boolean isBot(User user) {
-        //return true only if isDetectBot true AND the user object considered as a bot
-        //jika tidak minta deteksi bot, maka return false
-        if (!followEngineSetting.isDetectBot()) {
-            return false;
-        }
-        return user.isBot();
-
-    }
-
     @Override
     public void run(int maxPost) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
