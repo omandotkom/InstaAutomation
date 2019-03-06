@@ -22,10 +22,11 @@ public class IntervalGenerator {
     private static int[] intervalArrayFollow;
 
     public static void loadIntervals() throws IOException {
-        intervalArrayLike = AutoStatic.SETTINGS.getConfig().getLikeInterval();
-        intervalArrayFollow = AutoStatic.SETTINGS.getConfig().getFollowInterval();
-        System.out.println("Successfully loaded intervals : ");
-        System.out.println("--LIKE INTERVAL--");
+        // intervalArrayLike = AutoStatic.SETTINGS.getLikeInterval().split(",");
+        intervalArrayLike = convertStringtoIntArray(AutoStatic.SETTINGS.getLikeInterval());
+        intervalArrayFollow = convertStringtoIntArray(AutoStatic.SETTINGS.geetFollowInterval());
+        System.out.println("Successfully loaded intervals.");
+        /*System.out.println("--LIKE INTERVAL--");
         for (int i : intervalArrayLike) {
             System.out.println("  --" + i);
         }
@@ -34,8 +35,17 @@ public class IntervalGenerator {
         for (int i : intervalArrayFollow) {
             System.out.println("  --" + i);
 
-        }
+        }*/
 
+    }
+
+    private static int[] convertStringtoIntArray(String s) {
+        String[] intvString = s.split(",");
+        int[] l = new int[intvString.length];
+        for (int i = 0; i < intvString.length; i++) {
+            l[i] = Integer.parseInt(intvString[i]) * 1000;
+        }
+        return l;
     }
 
     public static int likeIntervalGenerator() {
@@ -53,13 +63,8 @@ public class IntervalGenerator {
     }
 
     public static void main(String[] args) throws IOException {
-        AutoStatic.SETTINGS.loadConfigFile();
-        loadIntervals();
-        LinkedList<Integer> followIntervals = new LinkedList<Integer>();
-        for (int i = 0; i < 800; i++) {
-            followIntervals.add(followIntervalGenerator());
-        }
-       
+
+        System.out.println(AutoStatic.SETTINGS.getLikeInterval());
     }
 
     public static char getRandomChar() {
