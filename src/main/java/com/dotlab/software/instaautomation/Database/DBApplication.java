@@ -35,7 +35,7 @@ public class DBApplication {
     /**
      * Connect to a sample database
      */
-    private void createNewDatabase() throws IOException {
+  /*  private void createNewDatabase() throws IOException {
 
         String url = "jdbc:sqlite:" + settings.getConfig().getDbPath();
 
@@ -104,4 +104,5 @@ public class DBApplication {
         }
 
     }
+*/
 }

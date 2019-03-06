@@ -26,6 +26,10 @@ import java.time.LocalDateTime;
 
 import com.dotlab.software.instaautomation.Settings.ApplicationSettings;
 import com.dotlab.software.instaautomation.UI.AutoStatic;
+import com.github.daytron.simpledialogfx.dialog.Dialog;
+import com.github.daytron.simpledialogfx.dialog.DialogType;
+import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Set;
 import org.jsoup.Jsoup;
@@ -43,8 +47,8 @@ public class Automation {
     private static WebDriver driver;
 
     private void setDriver(WebDriver driver) {
-        System.setProperty("webdriver.chrome.driver", new ApplicationSettings().getChromeDriverPath());
-        this.driver = driver;
+        //System.setProperty("webdriver.chrome.driver", new ApplicationSettings().getChromeDriverPath());
+        //this.driver = driver;
     }
 
     public WebDriver setToMobile() {
@@ -56,13 +60,28 @@ public class Automation {
     }
 
     public Automation() {
-        System.setProperty("webdriver.chrome.driver", new ApplicationSettings().getChromeDriverPath());
-        ChromeOptions options =new ChromeOptions();
-        //headless support
-        options.addArguments("headless");
-        options.addArguments("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
-        driver = new ChromeDriver(options);
-        
+        try {
+            System.setProperty("webdriver.chrome.driver", new ApplicationSettings().getChromeDriverPath());
+            ChromeOptions options = new ChromeOptions();
+            //headless support
+            options.addArguments("headless");
+            options.addArguments("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
+            driver = new ChromeDriver(options);
+        } catch (IOException ex) {
+            Dialog dialog = new Dialog(
+                    DialogType.ERROR,
+                    "Kesalahan",
+                    ex.getMessage());
+            dialog.showAndWait();
+            Logger.getLogger(Automation.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(Automation.class.getName()).log(Level.SEVERE, null, ex);
+        Dialog dialog = new Dialog(
+                    DialogType.ERROR,
+                    "Kesalahan",
+                    ex.getMessage());
+        dialog.showAndWait();
+        }
 
     }
 
@@ -130,7 +149,7 @@ public class Automation {
         }
         try {
             this.scrollDown();
-            WebElement button = driver.findElement(By.className(AutoStatic.SETTINGS.getConfig().getLikeButton()));
+            WebElement button = driver.findElement(By.className(AutoStatic.SETTINGS.getLikeButton()));
             button.click();
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
@@ -179,9 +198,9 @@ public class Automation {
         return driver;
     }
 
-    public void setWebDiver(WebDriver driver) {
+    public void setWebDiver(WebDriver driver) throws IOException, URISyntaxException {
         this.driver = driver;
-        System.setProperty("webdriver.chrome.driver", new ApplicationSettings().getChromeDriverPath());
+        System.setProperty("webdriver.chrome.driver", AutoStatic.SETTINGS.getChromeDriverPath());
 
     }
 
@@ -298,10 +317,9 @@ public class Automation {
         return result;
 
     }
-    
-    
-    public boolean unfollow2(String url){
-        
-    return true;
+
+    public boolean unfollow2(String url) {
+
+        return true;
     }
 }
