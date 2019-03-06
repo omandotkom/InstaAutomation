@@ -64,6 +64,8 @@ public class MassiveAccountHomeController implements Initializable {
 
     @FXML
     private void checkEmailReadyAction(ActionEvent event) {
+        
+       /*
         if (checkEmailReady.isSelected()) {
             FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Pilih File Konfigurasi");
@@ -87,6 +89,7 @@ public class MassiveAccountHomeController implements Initializable {
                 checkEmailReady.setSelected(false);
             }
         }
+*/
     }
 
     private void logger(String logMessage) {
