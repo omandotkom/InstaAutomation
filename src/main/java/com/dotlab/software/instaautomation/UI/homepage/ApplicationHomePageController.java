@@ -7,6 +7,8 @@ package com.dotlab.software.instaautomation.UI.homepage;
 
 import com.dotlab.software.instaautomation.UI.AutoStatic;
 import com.dotlab.software.instaautomation.UI.MessagePopup;
+import com.github.daytron.simpledialogfx.dialog.Dialog;
+import com.github.daytron.simpledialogfx.dialog.DialogType;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -35,11 +37,6 @@ public class ApplicationHomePageController implements Initializable {
     @FXML
     private MenuItem menuPengaturan;
     @FXML
-    private RadioMenuItem rbThreadShutdown;
-
-    @FXML
-    private Menu mnKontrolTugas;
-    @FXML
     private Button btnLikeModule;
     @FXML
     private Button btnFollowModule;
@@ -47,6 +44,8 @@ public class ApplicationHomePageController implements Initializable {
     private ImageView imgLogo;
     @FXML
     private Button btnMassiveAccount;
+    @FXML
+    private Button btnMassiveAccount1;
 
     /**
      * Initializes the controller class.
@@ -102,6 +101,29 @@ public class ApplicationHomePageController implements Initializable {
 
     @FXML
     private void btnMassiveAccountAction(ActionEvent event) {
+      Dialog dialog = new Dialog(DialogType.ERROR,"Fungsi tidak di dukung.","Fitur yang Anda minta sedang dalam tahap pengembangan.");
+      dialog.showAndWait();
+    }
+
+    @FXML
+    private void mnItemPengaturan(ActionEvent event) {
+              Dialog dialog = new Dialog(DialogType.ERROR,"Fungsi tidak di dukung.","Fitur yang Anda minta sedang dalam tahap pengembangan.");
+      dialog.showAndWait();
+
+    }
+
+    @FXML
+    private void mnItemKeluar(ActionEvent event) {
+          Dialog dialog = new Dialog(DialogType.ERROR,"Fungsi tidak di dukung.","Fitur yang Anda minta sedang dalam tahap pengembangan.");
+      dialog.showAndWait();
+
+    }
+
+    @FXML
+    private void mnItemDelete(ActionEvent event) {
+          Dialog dialog = new Dialog(DialogType.ERROR,"Fungsi tidak di dukung.","Fitur yang Anda minta sedang dalam tahap pengembangan.");
+      dialog.showAndWait();
+
     }
 
 }
