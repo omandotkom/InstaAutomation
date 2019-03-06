@@ -46,13 +46,9 @@ public class LikeModuleController implements Initializable {
     @FXML
     private Button btnLikeBerhenti;
     @FXML
-    private Button btnLikePause;
-    @FXML
     private CheckBox checkLikeTopPost;
     @FXML
     private TextArea txtLikeLog;
-    @FXML
-    private MenuItem menuPengaturan;
     @FXML
     private Menu mnKontrolTugas;
     @FXML
