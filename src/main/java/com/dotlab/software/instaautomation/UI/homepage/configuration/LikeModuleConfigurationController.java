@@ -8,6 +8,8 @@ package com.dotlab.software.instaautomation.UI.homepage.configuration;
 import com.dotlab.software.instaautomation.Settings.ApplicationSettings;
 import com.dotlab.software.instaautomation.UI.AutoStatic;
 import com.dotlab.software.instaautomation.UI.MessagePopup;
+import com.github.daytron.simpledialogfx.dialog.Dialog;
+import com.github.daytron.simpledialogfx.dialog.DialogType;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -17,6 +19,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+;
 import javafx.scene.control.TextField;
 
 /**
@@ -38,28 +41,34 @@ public class LikeModuleConfigurationController implements Initializable {
     /**
      * Initializes the controller class.
      */
-   
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-     
-        try {
-            txtIntervalWaktu.setText(AutoStatic.SETTINGS.getConfig().getLikeIntervalString());
-            txtIdentifier.setText(AutoStatic.SETTINGS.getConfig().getLikeButton());
-        } catch (IOException ex) {
-         MessagePopup.show(ex.getMessage(), MessagePopup.MessageType.Error);
-        }
-    }    
+
+        txtIntervalWaktu.setText(AutoStatic.SETTINGS.getLikeInterval());
+        txtIdentifier.setText(AutoStatic.SETTINGS.getLikeButton());
+
+    }
 
     @FXML
     private void btnSimpanonAction(ActionEvent event) {
         try {
-            AutoStatic.SETTINGS.getConfig().setLikeButton(txtIdentifier.getText());
-           // AutoStatic.SETTINGS.getConfig().setLikeButton(txtIdentifier.getText());
-           if (AutoStatic.SETTINGS.saveConfiguration()){
+            AutoStatic.SETTINGS.saveLikeButton(txtIdentifier.getText());
+            // AutoStatic.SETTINGS.getConfig().setLikeButton(txtIdentifier.getText());
+            /*if (AutoStatic.SETTINGS.saveConfiguration()){
            MessagePopup.show("Berhasil menyimpan konfigurasi.", MessagePopup.MessageType.Information);
-           }
-        } catch (IOException ex) {
-        MessagePopup.show("Gagal menyimpan konfigurasi.\n--" + ex.getMessage(), MessagePopup.MessageType.Error);
+           }*/
+            Dialog dialog = new Dialog(
+                    DialogType.CONFIRMATION,
+                    "Berhasil",
+                    "Sukses merubah data");
+            dialog.showAndWait();
+        } catch (Exception ex) {
+            //MessagePopup.show("Gagal menyimpan konfigurasi.\n--" + ex.getMessage(), MessagePopup.MessageType.Error);
+          Dialog dialog = new Dialog(
+                    DialogType.CONFIRMATION,
+                    "Gagal",
+                    "Gagal merubah data");
+            dialog.showAndWait();
         }
     }
 
@@ -69,7 +78,7 @@ public class LikeModuleConfigurationController implements Initializable {
 
     @FXML
     private void txtIdentifieronAction(ActionEvent event) {
-       
+
     }
-    
+
 }
