@@ -4,7 +4,6 @@
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.RadioMenuItem?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -16,21 +15,13 @@
         <menus>
           <Menu mnemonicParsing="false" text="Aplikasi">
             <items>
-              <MenuItem fx:id="menuPengaturan" mnemonicParsing="false" text="Pengaturan" />
-                  <MenuItem mnemonicParsing="false" text="Keluar" />
+              <MenuItem fx:id="menuPengaturan" mnemonicParsing="false" onAction="#mnItemPengaturan" text="Pengaturan" />
+                  <MenuItem mnemonicParsing="false" onAction="#mnItemKeluar" text="Keluar" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Edit">
             <items>
-              <MenuItem mnemonicParsing="false" text="Delete" />
-            </items>
-          </Menu>
-          <Menu fx:id="mnKontrolTugas" mnemonicParsing="false" text="Kontrol Tugas">
-            <items>
-              <MenuItem mnemonicParsing="false" text="Kendali" />
-                  <RadioMenuItem mnemonicParsing="false" text="Tutup Aplikasi" />
-                  <RadioMenuItem mnemonicParsing="false" text="Sleep" />
-                  <RadioMenuItem fx:id="rbThreadShutdown" mnemonicParsing="false" text="Matikan Komputer" />
+              <MenuItem mnemonicParsing="false" onAction="#mnItemDelete" text="Delete" />
             </items>
           </Menu>
         </menus>
@@ -45,7 +36,8 @@
             </ImageView>
          </children>
       </HBox>
-      <Button fx:id="btnFollowModule" layoutX="249.0" layoutY="224.0" mnemonicParsing="false" onAction="#btnFollowModuleAction" prefHeight="90.0" prefWidth="210.0" text="Follow Module" />
-      <Button fx:id="btnMassiveAccount" layoutX="478.0" layoutY="224.0" mnemonicParsing="false" onAction="#btnMassiveAccountAction" prefHeight="90.0" prefWidth="200.0" text="Massive Account (Pro)" />
+      <Button fx:id="btnFollowModule" layoutX="340.0" layoutY="224.0" mnemonicParsing="false" onAction="#btnFollowModuleAction" prefHeight="90.0" prefWidth="210.0" text="Follow Module" />
+      <Button fx:id="btnMassiveAccount" layoutX="680.0" layoutY="224.0" mnemonicParsing="false" onAction="#btnMassiveAccountAction" prefHeight="90.0" prefWidth="200.0" text="Massive Account (Pro)" />
+      <Button fx:id="btnMassiveAccount1" layoutX="690.0" layoutY="234.0" mnemonicParsing="false" onAction="#btnMassiveAccountAction" prefHeight="90.0" prefWidth="200.0" text="Massive Account (Pro)" />
    </children>
 </AnchorPane>
