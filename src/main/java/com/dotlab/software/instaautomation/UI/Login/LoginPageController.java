@@ -21,7 +21,10 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import com.dotlab.software.instaautomation.Settings.ApplicationSettings;
+import com.github.daytron.simpledialogfx.dialog.Dialog;
+import com.github.daytron.simpledialogfx.dialog.DialogType;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.fxml.FXMLLoader;
@@ -64,10 +67,10 @@ public class LoginPageController implements Initializable {
         // TODO
         ApplicationSettings settings = new ApplicationSettings();
         //System.out.println("THE FUCKING PATH IS : " + ClassLoader.)
-        if (settings.isValidConfigFile(settings.getConfigPath())) {
+       /* if (settings.isValidConfigFile(settings.getConfigPath())) {
             try {
                 IntervalGenerator.loadIntervals();
-        
+
                 btnMasuk.setDisable(false);
             } catch (IOException ex) {
                 Logger.getLogger(LoginPageController.class.getName()).log(Level.SEVERE, null, ex);
@@ -80,8 +83,8 @@ public class LoginPageController implements Initializable {
         } else {
             txtConfigPath.clear();
             btnMasuk.setDisable(true);
-        }
-        txtConfigPath.setText(settings.getConfigPath());
+        }*/
+        //txtConfigPath.setText(settings.getConfigPath());
         if (settings.getUser() != null) {
             usernameTextField.setText(settings.getUser().getUsername());
             passwordTextField.setText(settings.getUser().getPassword());
@@ -111,10 +114,10 @@ public class LoginPageController implements Initializable {
 
         });
 
-        btnBrowseConfig.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                ApplicationSettings settings = new ApplicationSettings();
+//      btnBrowseConfig.setOnAction(new EventHandler<ActionEvent>() {
+  //          @Override
+    //        public void handle(ActionEvent t) {
+               /* ApplicationSettings settings = new ApplicationSettings();
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Pilih File Konfigurasi");
                 String path = fileChooser.showOpenDialog(btnBrowseConfig.getScene().getWindow()).getAbsolutePath();
@@ -129,9 +132,10 @@ public class LoginPageController implements Initializable {
                         }
                     }
                 }
-            }
-        });
-        txtConfigPath.textProperty().addListener((observable, oldValue, newValue) -> {
+*/
+        //    }
+      //  });
+       /* txtConfigPath.textProperty().addListener((observable, oldValue, newValue) -> {
 
             if (settings.isValidConfigFile(txtConfigPath.getText())) {
                 lblStatusKonfigurasi.setText("Konfigurasi selesai");
@@ -147,17 +151,28 @@ public class LoginPageController implements Initializable {
                 btnMasuk.setDisable(true);
 
             }
-        });
+        });*/
 
-        if (settings.getChromeDriverPath().isEmpty()) {
+        try {
+            if (settings.getChromeDriverPath().isEmpty()) {
 
-            btnMasuk.setDisable(true);
-            MessagePopup.show("Driver chrome tidak ada.", MessagePopup.MessageType.Error);
-            //btnSettings.setVisible(true);
+                btnMasuk.setDisable(true);
+                MessagePopup.show("Driver chrome tidak ada.", MessagePopup.MessageType.Error);
+                //btnSettings.setVisible(true);
+
+            }
+        } catch (IOException ex) {
+            // Logger.getLogger(LoginPageController.class.getName()).log(Level.SEVERE, null, ex);
+            Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+            dialog.showAndWait();
+
+        } catch (URISyntaxException ex) {
+            Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+            dialog.showAndWait();
 
         }
 
-        btnSettings.setOnAction(new EventHandler<ActionEvent>() {
+/*        btnSettings.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
                 try {
@@ -171,11 +186,13 @@ public class LoginPageController implements Initializable {
                     stage.showAndWait();
 
                 } catch (IOException ex) {
-                    Logger.getLogger(LoginPageController.class.getName()).log(Level.SEVERE, null, ex);
+                    Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+                    dialog.showAndWait();
+
                 }
             }
         });
-
+*/
     }
 
     private void login() {
@@ -196,7 +213,10 @@ public class LoginPageController implements Initializable {
                 stage.show();
 
             } catch (IOException ex) {
-                Logger.getLogger(LoginPageController.class.getName()).log(Level.SEVERE, null, ex);
+                //  Logger.getLogger(LoginPageController.class.getName()).log(Level.SEVERE, null, ex);
+                Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+                dialog.showAndWait();
+
             }
 
         }
