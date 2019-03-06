@@ -12,7 +12,7 @@ import org.json.JSONObject;
  * @author omandotkom
  */
 public class Config {
-
+/*
     private String validation, version, likeInterval, commentInterval, followInterval;
     private String likeButton;
 
@@ -110,4 +110,5 @@ public class Config {
 
         return jsonObject;
     }
+*/
 }
