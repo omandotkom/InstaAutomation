@@ -7,6 +7,7 @@ package com.dotlab.software.instaautomation.UI.homepage;
 
 import com.dotlab.software.instaautomation.Settings.ApplicationSettings;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -47,11 +48,8 @@ public class ApplicationnSettingsController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         ApplicationSettings settings = new ApplicationSettings();
-        try {
-            txtLikeInterval.setText(settings.getConfig().getLikeIntervalString());
-        } catch (IOException ex) {
-            Logger.getLogger(ApplicationnSettingsController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        txtLikeInterval.setText(settings.getLikeInterval());
+
         btnBrowse.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
@@ -66,7 +64,13 @@ public class ApplicationnSettingsController implements Initializable {
                         alert.setHeaderText(null);
                         alert.setContentText("Berhasil mengatur ChromeDriver, silahkan tekan tombol Tutup Aplikasi.");
                         alert.showAndWait();
-                        driverPath.setText(new ApplicationSettings().getChromeDriverPath());
+                        try {
+                            driverPath.setText(new ApplicationSettings().getChromeDriverPath());
+                        } catch (IOException ex) {
+                            Logger.getLogger(ApplicationnSettingsController.class.getName()).log(Level.SEVERE, null, ex);
+                        } catch (URISyntaxException ex) {
+                            Logger.getLogger(ApplicationnSettingsController.class.getName()).log(Level.SEVERE, null, ex);
+                        }
 
                     }
                 }
@@ -79,8 +83,14 @@ public class ApplicationnSettingsController implements Initializable {
                 System.exit(0);
             }
         });
-        if (!settings.getChromeDriverPath().isEmpty()){
-        driverPath.setText(settings.getChromeDriverPath());
+        try {
+            if (!settings.getChromeDriverPath().isEmpty()) {
+                driverPath.setText(settings.getChromeDriverPath());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ApplicationnSettingsController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(ApplicationnSettingsController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
