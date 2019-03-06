@@ -26,6 +26,10 @@ InstaAutomation adalah perangkat lunak berbasis Java yang dikembangkan menggunak
 InstaAutomation membutuhkan : 
 1. Java 8 (JRE), untuk proses instalasi Java 8, silahkan merujuk ke link berikut https://www.java.com/en/download/help/download_options.xml
 2. Google Chrome versi terbaru
+### Download!
+Unduh semua dokumen dalam direktori berikut ->>
+https://github.com/omandotkom/InstaAutomation/tree/master/target/bin-public
+
 ### Run
 ##### Cara 1
 ```sh
