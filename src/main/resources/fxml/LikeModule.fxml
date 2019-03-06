@@ -51,17 +51,6 @@
       <TextArea fx:id="txtLikeLog" layoutX="14.0" layoutY="263.0" prefHeight="303.0" prefWidth="726.0" />
       <MenuBar prefHeight="29.0" prefWidth="897.0">
          <menus>
-            <Menu mnemonicParsing="false" text="Aplikasi">
-               <items>
-                  <MenuItem fx:id="menuPengaturan" mnemonicParsing="false" text="Pengaturan" />
-                  <MenuItem mnemonicParsing="false" text="Keluar" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Edit">
-               <items>
-                  <MenuItem mnemonicParsing="false" text="Delete" />
-               </items>
-            </Menu>
             <Menu fx:id="mnKontrolTugas" mnemonicParsing="false" text="Kontrol Tugas">
                <items>
                   <MenuItem mnemonicParsing="false" text="Kendali" />
