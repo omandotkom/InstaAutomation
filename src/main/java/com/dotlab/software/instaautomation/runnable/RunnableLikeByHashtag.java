@@ -13,6 +13,8 @@ import com.github.daytron.simpledialogfx.dialog.Dialog;
 import com.github.daytron.simpledialogfx.dialog.DialogType;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
+import org.openqa.selenium.WebDriverException;
 
 /**
  *
@@ -88,10 +90,21 @@ public class RunnableLikeByHashtag implements Runnable {
                             } else {
                                 runner.logMessage("Gagal menyukai " + post.getUrl());
                             }
-                        } catch (Exception ex) {
+                        }catch(WebDriverException e){
+                        System.out.println("Failed to like : " + e.getMessage());
+                        }
+                        
+                        catch (Exception ex) {
+                            Platform.runLater(new Runnable(){
+                                @Override
+                                public void run() {
+                             System.out.println("Failed to like");   
+                                    // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                                }
+                            });
                             Logger.getLogger(RunnableLikeByHashtag.class.getName()).log(Level.SEVERE, null, ex);
-                            Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
-                            dialog.showAndWait();
+                            //Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+                            //dialog.showAndWait();
                         }
                         currentMedia++;
                         Thread.sleep(IntervalGenerator.likeIntervalGenerator());
