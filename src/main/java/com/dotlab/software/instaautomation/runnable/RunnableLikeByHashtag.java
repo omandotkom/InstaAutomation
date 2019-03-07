@@ -9,6 +9,10 @@ import com.dotlab.software.instaautomation.UI.AutoStatic;
 import com.dotlab.software.instaautomation.UI.homepage.IntervalGenerator;
 import com.dotlab.software.instaautomation.Scrapper.Entities.Post;
 import com.dotlab.software.instaautomation.Scrapper.HashtagEngine;
+import com.github.daytron.simpledialogfx.dialog.Dialog;
+import com.github.daytron.simpledialogfx.dialog.DialogType;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -78,20 +82,28 @@ public class RunnableLikeByHashtag implements Runnable {
 
                 try {
                     if (running) {
-                        if (AutoStatic.AUTOMATION.like(post.getUrl())) {
-                            runner.logMessage("Berhasil menyukai " + post.getShortcode() + " | " + currentMedia + "/" + engine.getPostList().size());
-                        } else {
-                            runner.logMessage("Gagal menyukai " + post.getUrl());
+                        try {
+                            if (AutoStatic.AUTOMATION.like(post.getUrl())) {
+                                runner.logMessage("Berhasil menyukai " + post.getShortcode() + " | " + currentMedia + "/" + engine.getPostList().size());
+                            } else {
+                                runner.logMessage("Gagal menyukai " + post.getUrl());
+                            }
+                        } catch (Exception ex) {
+                            Logger.getLogger(RunnableLikeByHashtag.class.getName()).log(Level.SEVERE, null, ex);
+                            Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+                            dialog.showAndWait();
                         }
                         currentMedia++;
                         Thread.sleep(IntervalGenerator.likeIntervalGenerator());
-                        
+
                     } else {
                         break;
                     }
                 } catch (InterruptedException ex) {
                     //    Logger.getLogger(ApplicationHomePageController.class.getName()).log(Level.SEVERE, null, ex);
                     runner.logMessage(ex.getMessage());
+                    Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+                    dialog.showAndWait();
                 }
             }
 

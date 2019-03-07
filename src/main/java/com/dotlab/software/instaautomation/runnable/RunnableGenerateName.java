@@ -7,6 +7,10 @@ package com.dotlab.software.instaautomation.runnable;
 
 import com.dotlab.software.instaautomation.Scrapper.NameGeneratorEngine;
 import com.dotlab.software.instaautomation.UI.AutoStatic;
+import com.github.daytron.simpledialogfx.dialog.Dialog;
+import com.github.daytron.simpledialogfx.dialog.DialogType;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -32,8 +36,14 @@ public class RunnableGenerateName implements Runnable {
         engine.run(num);
         int index = 0;
         for (String email : NameGeneratorEngine.getEmailListFromFile(emailPath)) {
-            AutoStatic.AUTOMATION.register(engine.getUserList().get(index).getCompleteName(), engine.getUserList().get(index).generateUsername(), email);
-            runner.logMessage(engine.getUserList().get(index).getCompleteName() + "|" + engine.getUserList().get(index).generateUsername() + "|" + email);
+            try {
+                AutoStatic.AUTOMATION.register(engine.getUserList().get(index).getCompleteName(), engine.getUserList().get(index).generateUsername(), email);
+                runner.logMessage(engine.getUserList().get(index).getCompleteName() + "|" + engine.getUserList().get(index).generateUsername() + "|" + email);
+            } catch (Exception ex) {
+                Logger.getLogger(RunnableGenerateName.class.getName()).log(Level.SEVERE, null, ex);
+            Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+                    dialog.showAndWait();
+            }
 
         }
         runner.onRunnerDone();

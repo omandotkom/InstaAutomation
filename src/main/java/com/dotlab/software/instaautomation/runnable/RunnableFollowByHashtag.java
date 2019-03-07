@@ -9,6 +9,8 @@ import com.dotlab.software.instaautomation.Scrapper.Entities.Post;
 import com.dotlab.software.instaautomation.Scrapper.HashtagEngine;
 import com.dotlab.software.instaautomation.UI.AutoStatic;
 import com.dotlab.software.instaautomation.UI.homepage.IntervalGenerator;
+import com.github.daytron.simpledialogfx.dialog.Dialog;
+import com.github.daytron.simpledialogfx.dialog.DialogType;
 
 /**
  *
@@ -81,8 +83,12 @@ public class RunnableFollowByHashtag implements Runnable {
                 } catch (InterruptedException ex) {
                     //    Logger.getLogger(ApplicationHomePageController.class.getName()).log(Level.SEVERE, null, ex);
                     runner.logMessage(ex.getMessage());
+               Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+                    dialog.showAndWait();
                 } catch (Exception e) {
                     runner.logMessage(e.getMessage());
+                Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", e.getMessage());
+                    dialog.showAndWait();
                 }
                 if (!running) {
                     break;

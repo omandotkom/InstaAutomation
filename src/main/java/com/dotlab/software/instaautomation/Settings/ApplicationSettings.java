@@ -26,6 +26,7 @@ import java.nio.channels.FileLock;
 import java.nio.channels.OverlappingFileLockException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.apache.commons.lang3.SystemUtils;
 
 import org.apache.tika.Tika;
 import org.json.JSONException;
@@ -95,12 +96,16 @@ public class ApplicationSettings {
     public String getLikeButton() {
         return prefs.get(PREF_LIKE_BUTTTON, "coreSpriteHeartOpen");
     }
-    public void saveLikeButton(String name){
-    prefs.put(PREF_LIKE_BUTTTON, name);
+
+    public void saveLikeButton(String name) {
+        prefs.put(PREF_LIKE_BUTTTON, name);
     }
 
     public String getChromeDriverPath() throws IOException, URISyntaxException {
         //   return prefs.get(this.PREF_CHROMEDRIVERPATH, "");
+        if (getOperatingSystemSystemUtils().contains("windows")){
+        return CSVReport.getJarPath() + "/chromedriver.exe";
+        }
         return CSVReport.getJarPath() + "/chromedriver";
     }
 
@@ -130,6 +135,15 @@ public class ApplicationSettings {
             //Logger.getLogger(ApplicationSettings.class.getName()).log(Level.SEVERE, null, ex);
         }
         return false;
+    }
+
+    public static String getOperatingSystemSystemUtils() {
+        String os = SystemUtils.OS_NAME;
+        // System.out.println("Using SystemUtils: " + os);
+        return os.toLowerCase();
+    }
+    public static void main(String[] args){
+    System.out.println(getOperatingSystemSystemUtils());
     }
 
     /*   public boolean saveConfiguration() throws IOException {

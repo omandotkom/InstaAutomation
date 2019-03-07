@@ -27,10 +27,12 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.stage.FileChooser;
 
 import javafx.stage.Stage;
@@ -54,20 +56,14 @@ public class LoginPageController implements Initializable {
     @FXML
     private Button btnMasuk;
     @FXML
-    private Label lblStatusKonfigurasi;
-    @FXML
-    private Button btnBrowseConfig;
-    @FXML
-    private TextField txtConfigPath;
-    @FXML
-    private Button btnSettings;
+    private ProgressBar progressBarLogin;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         ApplicationSettings settings = new ApplicationSettings();
         //System.out.println("THE FUCKING PATH IS : " + ClassLoader.)
-       /* if (settings.isValidConfigFile(settings.getConfigPath())) {
+        /* if (settings.isValidConfigFile(settings.getConfigPath())) {
             try {
                 IntervalGenerator.loadIntervals();
 
@@ -93,31 +89,34 @@ public class LoginPageController implements Initializable {
             @Override
             public void handle(ActionEvent t) {
 
+                //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 if (usernameTextField.getText().isEmpty()) {
                     //username empty
-                    Alert alert = new Alert(AlertType.ERROR, "Harap isi username instagram");
-                    alert.showAndWait();
+                    Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", "Harap isi username instagram");
+                    dialog.showAndWait();
                 } else {
                     if (passwordTextField.getText().isEmpty()) {
                         //password empty
-                        Alert alert = new Alert(AlertType.ERROR, "Harap isi password instagram");
-                        alert.showAndWait();
 
+                        Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", "Harap isi password instagram");
+                        dialog.showAndWait();
                     } else {
                         //Login()
                         btnMasuk.setDisable(true);
-                        login();
-
+                        Thread loginThread = new Thread(new AuthLogin(createLoginListener()));
+                        //login(createLoginListener());
+                        loginThread.start();
                     }
                 }
+
             }
 
         });
 
 //      btnBrowseConfig.setOnAction(new EventHandler<ActionEvent>() {
-  //          @Override
-    //        public void handle(ActionEvent t) {
-               /* ApplicationSettings settings = new ApplicationSettings();
+        //          @Override
+        //        public void handle(ActionEvent t) {
+        /* ApplicationSettings settings = new ApplicationSettings();
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Pilih File Konfigurasi");
                 String path = fileChooser.showOpenDialog(btnBrowseConfig.getScene().getWindow()).getAbsolutePath();
@@ -132,10 +131,10 @@ public class LoginPageController implements Initializable {
                         }
                     }
                 }
-*/
+         */
         //    }
-      //  });
-       /* txtConfigPath.textProperty().addListener((observable, oldValue, newValue) -> {
+        //  });
+        /* txtConfigPath.textProperty().addListener((observable, oldValue, newValue) -> {
 
             if (settings.isValidConfigFile(txtConfigPath.getText())) {
                 lblStatusKonfigurasi.setText("Konfigurasi selesai");
@@ -152,7 +151,6 @@ public class LoginPageController implements Initializable {
 
             }
         });*/
-
         try {
             if (settings.getChromeDriverPath().isEmpty()) {
 
@@ -163,16 +161,16 @@ public class LoginPageController implements Initializable {
             }
         } catch (IOException ex) {
             // Logger.getLogger(LoginPageController.class.getName()).log(Level.SEVERE, null, ex);
-            Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+            Dialog dialog = new Dialog(DialogType.EXCEPTION, "Kesalahan", ex.getMessage());
             dialog.showAndWait();
 
         } catch (URISyntaxException ex) {
-            Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+            Dialog dialog = new Dialog(DialogType.EXCEPTION, "Kesalahan", ex.getMessage());
             dialog.showAndWait();
 
         }
 
-/*        btnSettings.setOnAction(new EventHandler<ActionEvent>() {
+        /*        btnSettings.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent t) {
                 try {
@@ -192,33 +190,122 @@ public class LoginPageController implements Initializable {
                 }
             }
         });
-*/
+         */
     }
 
-    private void login() {
-        User user = new User();
-        // WebDriver driver = new ChromeDriver();
-        user.setUsername(usernameTextField.getText());
-        user.setPassword(passwordTextField.getText());
-        new ApplicationSettings().saveUser(user);
-        //Automation AUTOMATION = new Automation();
+    private LoginListener createLoginListener() {
+        LoginListener mLoginListener = new LoginListener() {
+            @Override
+            public void onLoginStarted() {
 
-        if (AutoStatic.AUTOMATION.auth(new ApplicationSettings().getUser().getUsername(), new ApplicationSettings().getUser().getPassword())) {
-            try {
-                AutoStatic.LOGGED_USER = user;
-                Parent root = FXMLLoader.load(getClass().getResource("/fxml/ApplicationHomePage.fxml"));
-                btnMasuk.getScene().getWindow().hide();
-                Stage stage = (Stage) btnMasuk.getScene().getWindow();
-                stage.setScene(new Scene(root));
-                stage.show();
-
-            } catch (IOException ex) {
-                //  Logger.getLogger(LoginPageController.class.getName()).log(Level.SEVERE, null, ex);
-                Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
-                dialog.showAndWait();
+                //Platform.runLater(r); 
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                        usernameTextField.setDisable(true);
+                        passwordTextField.setDisable(true);
+                        btnMasuk.setDisable(true);
+                        progressBarLogin.setProgress(ProgressBar.INDETERMINATE_PROGRESS);
+                    }
+                });
 
             }
 
-        }
+            @Override
+            public void onLoginFailed() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                        usernameTextField.setDisable(false);
+                        passwordTextField.setDisable(false);
+                        btnMasuk.setDisable(false);
+                        progressBarLogin.setProgress(0.0f);
+                         Dialog dialog = new Dialog(DialogType.EXCEPTION, "Kesalahan", "Please check your internet connection, username or password.");
+                dialog.showAndWait();
+                    }
+                });
+
+            }
+
+            @Override
+            public void onLoginSuccess(User user) {
+
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                        try {
+                            usernameTextField.setDisable(false);
+                            passwordTextField.setDisable(false);
+                            btnMasuk.setDisable(false);
+                            progressBarLogin.setProgress(1.0f);
+                            AutoStatic.LOGGED_USER = user;
+                            Parent root = FXMLLoader.load(getClass().getResource("/fxml/ApplicationHomePage.fxml"));
+                            btnMasuk.getScene().getWindow().hide();
+                            Stage stage = (Stage) btnMasuk.getScene().getWindow();
+                            stage.setScene(new Scene(root));
+                            stage.show();
+
+                        } catch (IOException ex) {
+                            //  Logger.getLogger(LoginPageController.class.getName()).log(Level.SEVERE, null, ex);
+                            Dialog dialog = new Dialog(DialogType.EXCEPTION, "Kesalahan", "An error occured during login");
+                            dialog.showAndWait();
+
+                        }
+                    }
+                });
+
+            }
+
+        };
+        return mLoginListener;
     }
+
+    private interface LoginListener {
+
+        void onLoginStarted();
+
+        void onLoginFailed();
+
+        void onLoginSuccess(User user);
+    }
+
+    class AuthLogin implements Runnable {
+
+        private LoginListener list;
+
+        public AuthLogin(LoginListener list) {
+            this.list = list;
+        }
+
+        private void login() {
+
+            try {
+                User user = new User();
+                // WebDriver driver = new ChromeDriver();
+                user.setUsername(usernameTextField.getText());
+                user.setPassword(passwordTextField.getText());
+                new ApplicationSettings().saveUser(user);
+                //Automation AUTOMATION = new AUTOMATION;
+                list.onLoginStarted();
+                if (AutoStatic.AUTOMATION.auth(new ApplicationSettings().getUser().getUsername(), new ApplicationSettings().getUser().getPassword())) {
+                    list.onLoginSuccess(user);
+                }
+            } catch (Exception ex) {
+                list.onLoginFailed();
+               
+
+            }
+        }
+
+        @Override
+        public void run() {
+            // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            login();
+        }
+
+    }
+
 }

@@ -18,6 +18,8 @@ import com.dotlab.software.instaautomation.runnable.LoggerInterface;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.json.JSONObject;
 
 /**
@@ -58,7 +60,7 @@ public class AccountEngine extends Engine {
         //this.logger = log;
     }
 
-    public void analyzeAccount(User usertoAnalyze) {
+    public void analyzeAccount(User usertoAnalyze) throws Exception {
         String response2 = newexec(URLGenerator.generateAccountA1(usertoAnalyze.getUsername()));
         if (Engine.isJSONValid(response2)) {
             AccountParser newParser = new AccountParser(response2);
@@ -67,7 +69,7 @@ public class AccountEngine extends Engine {
         }
     }
 
-    public ArrayList<User> getCleanFollowerList() {
+    public ArrayList<User> getCleanFollowerList() throws Exception {
         boolean firstpage = true;
         int currentAccount = 1;
         String response = newexec(URLGenerator.generateAccountA1(cleanerEngineSetting.getUser().getUsername()));
@@ -200,7 +202,7 @@ public class AccountEngine extends Engine {
 
     }
 
-    public ArrayList<User> getFollowerList() {
+    public ArrayList<User> getFollowerList() throws Exception {
         boolean firstpage = true;
         String response = newexec(URLGenerator.generateAccountA1(followEngineSetting.getTargetAccount()));
 
@@ -319,11 +321,16 @@ public class AccountEngine extends Engine {
         while (parser.isHas_next_page()) {
             String response = "";
             if (isFirstPage) {
-                response = newexec(followEngineSetting.getTargetAccount());
-                parser = new AccountParser(response);
-                parser.parse();
-                accountid = parser.getAccountId();
-                isFirstPage = false;
+                try {
+                    response = newexec(followEngineSetting.getTargetAccount());
+                    parser = new AccountParser(response);
+                    parser.parse();
+                    accountid = parser.getAccountId();
+                    isFirstPage = false;
+                } catch (Exception ex) {
+                    Logger.getLogger(AccountEngine.class.getName()).log(Level.SEVERE, null, ex);
+                
+                }
             } else {
 
                 //response = exec("https://www.instagram.com/graphql/query/?query_hash=472f257a40c653c64c666ce877d59d2b&variables={\"id\":\"" + accountid + "\",\"first\":50,\"after\":\"" + parser.getEnd_cursor() + "\"}", AUTOMATION);

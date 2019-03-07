@@ -56,13 +56,17 @@ public class NameGeneratorEngine extends Engine {
 
     @Override
     public void run(int maxPost) {
-        //maxPost = maxNumber of account
-
-        String url = "https://uinames.com/api/?amount=" + maxPost;
-        String response = exec(url);
-        System.out.println(response);
-        AccountParser parser = new AccountParser();
-        userList = parser.GeneratedAccount(response);
+        try {
+            //maxPost = maxNumber of account
+            
+            String url = "https://uinames.com/api/?amount=" + maxPost;
+            String response = exec(url);
+            System.out.println(response);
+            AccountParser parser = new AccountParser();
+            userList = parser.GeneratedAccount(response);
+        } catch (Exception ex) {
+            Logger.getLogger(NameGeneratorEngine.class.getName()).log(Level.SEVERE, null, ex);
+        }
 
     }
 

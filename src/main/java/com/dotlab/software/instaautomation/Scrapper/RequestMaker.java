@@ -33,7 +33,7 @@ public class RequestMaker {
             return response.body().string();
         }
     }*/
- public String run(String url) throws IOException {
+ public String run(String url) throws IOException, Exception {
         OkHttpClient client = new OkHttpClient();
         System.out.println("Making request to " + url);
         Request request = new Request.Builder()

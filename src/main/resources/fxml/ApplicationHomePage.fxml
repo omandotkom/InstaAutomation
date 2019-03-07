@@ -36,8 +36,7 @@
             </ImageView>
          </children>
       </HBox>
-      <Button fx:id="btnFollowModule" layoutX="340.0" layoutY="224.0" mnemonicParsing="false" onAction="#btnFollowModuleAction" prefHeight="90.0" prefWidth="210.0" text="Follow Module" />
-      <Button fx:id="btnMassiveAccount" layoutX="680.0" layoutY="224.0" mnemonicParsing="false" onAction="#btnMassiveAccountAction" prefHeight="90.0" prefWidth="200.0" text="Massive Account (Pro)" />
-      <Button fx:id="btnMassiveAccount1" layoutX="690.0" layoutY="234.0" mnemonicParsing="false" onAction="#btnMassiveAccountAction" prefHeight="90.0" prefWidth="200.0" text="Massive Account (Pro)" />
+      <Button fx:id="btnFollowModule" layoutX="358.0" layoutY="224.0" mnemonicParsing="false" onAction="#btnFollowModuleAction" prefHeight="90.0" prefWidth="210.0" text="Follow Module" />
+      <Button fx:id="btnMassiveAccount1" layoutX="693.0" layoutY="224.0" mnemonicParsing="false" onAction="#btnMassiveAccountAction" prefHeight="90.0" prefWidth="200.0" text="Massive Account (Pro)" />
    </children>
 </AnchorPane>

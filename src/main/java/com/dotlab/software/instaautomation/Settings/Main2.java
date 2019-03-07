@@ -31,10 +31,6 @@ public class Main2 {
             System.out.println("tidal valid");
         };*/
      
-     ApplicationSettings settings = new ApplicationSettings();
-     int[] res = settings.getConfig().getLikeInterval();
-     for (int a : res){
-     System.out.println(a);
-     }
+  
     }
 }

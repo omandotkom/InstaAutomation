@@ -17,6 +17,8 @@ import com.dotlab.software.instaautomation.runnable.CustomRunnerInterface;
 import com.dotlab.software.instaautomation.runnable.RunnableCleaner;
 import com.dotlab.software.instaautomation.runnable.RunnableFollowByAccount;
 import com.dotlab.software.instaautomation.runnable.RunnableFollowByHashtag;
+import com.github.daytron.simpledialogfx.dialog.Dialog;
+import com.github.daytron.simpledialogfx.dialog.DialogType;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
@@ -384,10 +388,15 @@ public class FollowModuleController implements Initializable {
             Runnable run = new Runnable() {
                 @Override
                 public void run() {
-                    AccountEngine engine = new AccountEngine(filter);
-                    User u = new User();
-                    u.setUsername(txtFollowAccount.getText());
-                    engine.analyzeAccount(u);
+                    try {
+                        AccountEngine engine = new AccountEngine(filter);
+                        User u = new User();
+                        u.setUsername(txtFollowAccount.getText());
+                        engine.analyzeAccount(u);
+                    } catch (Exception ex) {
+                     Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+                    dialog.showAndWait();
+                    }
                 }
 
             };
@@ -485,7 +494,13 @@ public class FollowModuleController implements Initializable {
 
     @FXML
     private void btnBerhentiCleaneronAction(ActionEvent event) {
-        AutoStatic.AUTOMATION.unfollow("https://www.instagram.com/chasingclaudia/");
+        try {
+            AutoStatic.AUTOMATION.unfollow("https://www.instagram.com/chasingclaudia/");
+        } catch (Exception ex) {
+            Logger.getLogger(FollowModuleController.class.getName()).log(Level.SEVERE, null, ex);
+        Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+                    dialog.showAndWait();
+        }
     }
 
 }

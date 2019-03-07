@@ -45,7 +45,7 @@ public abstract class Engine {
     }
     protected ArrayList<Post> postList;
 
-    protected String exec(String url, Automation automation) {
+    protected String exec(String url, Automation automation) throws Exception {
         try {
             if (automation != null) {
                 return new RequestMaker().runWithResponse(automation, url);
@@ -59,7 +59,7 @@ public abstract class Engine {
         return null;
     }
 
-    protected String exec(String url) {
+    protected String exec(String url) throws Exception {
         try {
             return new RequestMaker().run(url);
         } catch (IOException ex) {
@@ -68,7 +68,7 @@ public abstract class Engine {
         return null;
     }
 
-    protected String newexec(String url) {
+    protected String newexec(String url) throws Exception {
         try {
                 return new RequestMaker().run(url);
             

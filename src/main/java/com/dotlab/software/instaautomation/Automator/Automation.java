@@ -59,33 +59,23 @@ public class Automation {
         return driver;
     }
 
-    public Automation() {
+    public Automation(){
         try {
             System.setProperty("webdriver.chrome.driver", new ApplicationSettings().getChromeDriverPath());
             ChromeOptions options = new ChromeOptions();
             //headless support
-            options.addArguments("headless");
+            //options.addArguments("headless");
             options.addArguments("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
             driver = new ChromeDriver(options);
         } catch (IOException ex) {
-            Dialog dialog = new Dialog(
-                    DialogType.ERROR,
-                    "Kesalahan",
-                    ex.getMessage());
-            dialog.showAndWait();
+        
             Logger.getLogger(Automation.class.getName()).log(Level.SEVERE, null, ex);
         } catch (URISyntaxException ex) {
             Logger.getLogger(Automation.class.getName()).log(Level.SEVERE, null, ex);
-        Dialog dialog = new Dialog(
-                    DialogType.ERROR,
-                    "Kesalahan",
-                    ex.getMessage());
-        dialog.showAndWait();
         }
-
     }
 
-    public void register(String name, String username, String email) {
+    public void register(String name, String username, String email) throws Exception{
         driver.get("https://www.instagram.com/accounts/emailsignup/");
         WebElement usernameElement = driver.findElement(By.name("username"));
         WebElement passwordElement = driver.findElement(By.name("password"));
@@ -109,9 +99,8 @@ public class Automation {
         driver.manage().timeouts().implicitlyWait(duration, TimeUnit.SECONDS);
     }
 
-    public Boolean auth(String user, String pass) {
+    public Boolean auth(String user, String pass) throws Exception,InterruptedException{
         Boolean returnVar = true;
-        try {
             System.out.println("Authentication started...");
             driver.manage().window().maximize();
             driver.get("https://m.instagram.com/accounts/login/?source=auth_switcher");
@@ -135,9 +124,7 @@ public class Automation {
                 returnVar = false;
             }
             //Cookie cok = driver.manage().getCookieNamed("sessionid");
-        } catch (InterruptedException ex) {
-            Logger.getLogger(Automation.class.getName()).log(Level.SEVERE, null, ex);
-        }
+     
         return returnVar;
     }
 
@@ -159,8 +146,10 @@ public class Automation {
         } catch (org.openqa.selenium.NoSuchElementException nse) {
             System.err.println("Error " + url);
             result = false;
+            throw(nse);
         } catch (Exception e) {
             result = false;
+            throw(e);
         }
         return result;
     }
@@ -256,10 +245,12 @@ public class Automation {
             System.err.println("Error " + url);
             System.err.println(nse.getMessage());
             result = false;
+            throw(nse);
         } catch (Exception e) {
             result = false;
             System.err.println("Error " + url);
             System.err.println(e.getMessage());
+        throw(e);
         }
         return result;
     }
@@ -283,8 +274,10 @@ public class Automation {
         } catch (org.openqa.selenium.NoSuchElementException nse) {
             System.err.println("Error " + url);
             result = false;
+            throw(nse);
         } catch (Exception e) {
             result = false;
+            throw(e);
         }
         return result;
     }

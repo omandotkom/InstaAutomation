@@ -52,27 +52,34 @@ public class ApplicationHomePageController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        //mengantur logo
-        Image image = new Image(getClass().getResourceAsStream("/img/applogo.png"));
-        if (image != null) {
-            imgLogo.setImage(image);
-        }
-        System.out.println("COOKIENYA " + AutoStatic.AUTOMATION.getDriver().manage().getCookies().toString());
-
-        menuPengaturan.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent t) {
-                try {
-
-                    SceneLauncher sceneLauncher = new SceneLauncher(getClass().getResource("/fxml/ApplicationSettings.fxml"),"Pengaturan");
-                    
-                    sceneLauncher.show();
-
-                } catch (IOException ex) {
-                    Logger.getLogger(ApplicationHomePageController.class.getName()).log(Level.SEVERE, null, ex);
-                }
+        try {
+            //mengantur logo
+            Image image = new Image(getClass().getResourceAsStream("/img/applogo.png"));
+            if (image != null) {
+                imgLogo.setImage(image);
             }
-        });
+            System.out.println("COOKIENYA " + AutoStatic.AUTOMATION.getDriver().manage().getCookies().toString());
+            
+            menuPengaturan.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent t) {
+                    try {
+                        
+                        SceneLauncher sceneLauncher = new SceneLauncher(getClass().getResource("/fxml/ApplicationnSettings.fxml"),"Pengaturan");
+                        
+                        sceneLauncher.show();
+                        
+                    } catch (IOException ex) {
+                   Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+                    dialog.showAndWait();
+                    }
+                }
+            });
+        } catch (Exception ex) {
+            Logger.getLogger(ApplicationHomePageController.class.getName()).log(Level.SEVERE, null, ex);
+       Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+                    dialog.showAndWait();
+        }
 
     }
 
