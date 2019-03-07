@@ -30,12 +30,8 @@ InstaAutomation membutuhkan :
 ### How To Use!!!
 1. Unduh file InstaAutomation.zip pada link berikut ( https://github.com/omandotkom/InstaAutomation/blob/master/target/bin-public/InstaAutomation.zip ).
 2. Ekstrak file InstaAutomation.zip pada folder yang Anda tentukan.
-3. 
-
-### Run
-##### Cara 1
+3. Ekstrak chromedriver sesuai dengan sistem operasi yang digunakan, Windows 64 bit tetap dapat menggunakan chromedriver 32 bit.
+4. Jalankan InstaAutomation.jar dengan klik kanan -> Open atau ketik perintah
 ```sh
 $ java -jar InstaAutomation-1.0-SNAPSHOT-jar-with-dependencies.jar
 ```
-##### Cara 2
-Klik kanan pada file InstaAutomation-1.0-SNAPSHOT-jar-with-dependencies.jar lalu Jalankan dengan Java.
