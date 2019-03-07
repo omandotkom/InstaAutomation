@@ -37,6 +37,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriverException;
 
 /**
  *
@@ -143,11 +144,13 @@ public class Automation {
             String time = dtf.format(now);
             System.out.println("(" + time + ") Successfully like " + url);
             result = true;
-        } catch (org.openqa.selenium.NoSuchElementException nse) {
-            System.err.println("Error " + url);
+        
+        }catch(WebDriverException e){
+         System.err.println("Error " + url);
             result = false;
-            throw(nse);
-        } catch (Exception e) {
+            throw(e);    
+        }
+         catch (Exception e) {
             result = false;
             throw(e);
         }
