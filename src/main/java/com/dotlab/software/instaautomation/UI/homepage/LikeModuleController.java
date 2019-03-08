@@ -9,6 +9,7 @@ import com.dotlab.software.instaautomation.Scrapper.Parser.HashtagParser;
 import com.dotlab.software.instaautomation.UI.MessagePopup;
 import com.dotlab.software.instaautomation.runnable.RunnerInterface;
 import com.dotlab.software.instaautomation.UI.Shutdown;
+import com.dotlab.software.instaautomation.filters.LikebyHashtagFilter;
 import com.dotlab.software.instaautomation.runnable.RunnableLikeByHashtag;
 import java.net.URL;
 import java.time.LocalDateTime;
@@ -68,7 +69,7 @@ public class LikeModuleController implements Initializable {
             public void handle(ActionEvent t) {
                 if (rbThreadShutdown.isSelected()) {
 
-                    logger("Mengatur shutdown otomatis... (status : " + rbThreadShutdown.isSelected() + ")");
+                    appLogger("Mengatur shutdown otomatis... (status : " + rbThreadShutdown.isSelected() + ")");
                     MessagePopup.show("Komputer akan dimatikan ketika\noperasi yang berjalan selesai.", MessagePopup.MessageType.Information);
                 }
             }
@@ -117,35 +118,14 @@ public class LikeModuleController implements Initializable {
                     if (!txtJumlahFoto.getText().isEmpty()) {
                         //hashtag dan jumlah foto sudah di tentukan
                         try {
-
-                            //run = new RunnableLikeByHashtag(txtHashtag.getText(), Integer.valueOf(txtJumlahFoto.getText()), checkLikeTopPost.isSelected());
-                            runnableHashtag = new RunnableLikeByHashtag(txtHashtag.getText(), Integer.valueOf(txtJumlahFoto.getText()), checkLikeTopPost.isSelected(), new RunnerInterface() {
-                                @Override
-                                public void onRunnerDone() {
-                                    logMessage("Operasi like selesai");
-                                    btnLikeBerhenti.setDisable(true);
-                                    btnLikeMulai.setDisable(false);
-                                    isEngineRunning = false;
-                                    if (rbThreadShutdown.isSelected()) {
-                                        logMessage("Mematikan komputer dalam 1 menit.");
-                                        Shutdown.shtdown();
-                                    }
-                                }
-
-                                @Override
-                                public void logMessage(String message) {
-                                    logger(message);
-                                }
-
-                                @Override
-                                public void onRunnerStart() {
-                                    isEngineRunning = true;
-                                }
-
-                            });
+                            LikebyHashtagFilter filter = new LikebyHashtagFilter();
+                            filter.setHashtag(txtHashtag.getText());
+                            filter.setMaxMedia(Integer.valueOf(txtJumlahFoto.getText()));
+                            filter.setTopPost(checkLikeTopPost.isSelected());
+                            filter.setLikeEvent(generateLikeEventInterface()); //run = new RunnableLikeByHashtag(txtHashtag.getText(), Integer.valueOf(txtJumlahFoto.getText()), checkLikeTopPost.isSelected());
+                            runnableHashtag = new RunnableLikeByHashtag(filter);
                             Thread runner = new Thread(runnableHashtag);
 
-                            logger("Pencarian media berdasarkan hashtag " + txtHashtag.getText());
                             txtLikeLog.clear();
                             runner.start();
                             //btnLikeMulai.setText("Berhenti");
@@ -168,7 +148,44 @@ public class LikeModuleController implements Initializable {
         });
     }
 
-    private void logger(String logMessage) {
+    private RunnerInterface generateLikeEventInterface() {
+        RunnerInterface likeInterface = new RunnerInterface() {
+            @Override
+            public void onRunnerDone() {
+                //      throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                logMessage("Operasi like selesai");
+                btnLikeBerhenti.setDisable(true);
+                btnLikeMulai.setDisable(false);
+                isEngineRunning = false;
+                if (rbThreadShutdown.isSelected()) {
+                    logMessage("Mematikan komputer dalam 1 menit.");
+                    Shutdown.shtdown();
+                }
+            }
+
+            @Override
+            public void onRunnerStart() {
+                appLogger("Pencarian media berdasarkan hashtag " + txtHashtag.getText());
+                //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                isEngineRunning = true;
+            }
+
+            @Override
+            public void onRunnerError(String errorMessage) {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                appLogger("ERROR : \n" + errorMessage);
+            }
+
+            @Override
+            public void logMessage(String message) {
+                appLogger(message);
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+        return likeInterface;
+    }
+
+    private void appLogger(String logMessage) {
         Platform.runLater(() -> {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
