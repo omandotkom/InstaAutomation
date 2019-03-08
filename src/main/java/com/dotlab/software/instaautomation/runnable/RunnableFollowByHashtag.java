@@ -9,8 +9,11 @@ import com.dotlab.software.instaautomation.Scrapper.Entities.Post;
 import com.dotlab.software.instaautomation.Scrapper.HashtagEngine;
 import com.dotlab.software.instaautomation.UI.AutoStatic;
 import com.dotlab.software.instaautomation.UI.homepage.IntervalGenerator;
+import com.dotlab.software.instaautomation.filters.FollowbyHashtagFilter;
 import com.github.daytron.simpledialogfx.dialog.Dialog;
 import com.github.daytron.simpledialogfx.dialog.DialogType;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriverException;
 
 /**
  *
@@ -20,16 +23,10 @@ public class RunnableFollowByHashtag implements Runnable {
 
     private boolean running;
 
-    private String hashtagInner;
-    private RunnerInterface runner;
-    int maxFollow;
-    private Boolean isIncludeLike = false;
+    private FollowbyHashtagFilter filter;
 
-    public RunnableFollowByHashtag(String hashtagParam, int maxNum, RunnerInterface onDo, Boolean isLike) {
-        this.hashtagInner = hashtagParam;
-        this.maxFollow = maxNum;
-        runner = onDo;
-        this.isIncludeLike = isLike;
+    public RunnableFollowByHashtag(FollowbyHashtagFilter fil) {
+        this.filter = fil;
     }
 
     public Boolean isRunning() {
@@ -38,21 +35,22 @@ public class RunnableFollowByHashtag implements Runnable {
 
     public void terminate() {
         running = false;
-        runner.logMessage("Menghentikan operasi follow by hashtag ...");
+        this.filter.getRunnerEvents().logMessage("Menghentikan operasi follow by hashtag ...");
     }
 
     @Override
     public void run() {
         running = true;
-        runner.onRunnerStart();
-        runner.logMessage("Memulai operasi Follow by Hashtag...");
-        runner.logMessage("Engine : #" + this.hashtagInner + " | " + this.maxFollow);
+
+        this.filter.getRunnerEvents().onRunnerStart();
+        this.filter.getRunnerEvents().logMessage("Memulai operasi Follow by Hashtag...");
+        this.filter.getRunnerEvents().logMessage("Engine : #" + this.filter.getHashtagInner() + " | " + this.filter.getMaxFollow());
         if (running) {
-            runner.logMessage("Mengumpulkan media...");
-            HashtagEngine engine = new HashtagEngine(hashtagInner, false);
-            engine.run(maxFollow);
-            runner.logMessage("Berhasil mengumpulkan " + engine.getPostList().size() + " media.");
-            runner.logMessage("Menunggu....");
+            this.filter.getRunnerEvents().logMessage("Mengumpulkan media...");
+            HashtagEngine engine = new HashtagEngine(filter.getHashtagInner(), false);
+            engine.run(filter.getMaxFollow());
+            this.filter.getRunnerEvents().logMessage("Berhasil mengumpulkan " + engine.getPostList().size() + " media.");
+            this.filter.getRunnerEvents().logMessage("Menunggu....");
             int currentMedia = 1;
             //ArrayList<Post> postList = engine.getPostList();
 
@@ -60,35 +58,47 @@ public class RunnableFollowByHashtag implements Runnable {
 
                 try {
                     if (running) {
-                        if (isIncludeLike) {
+                        if (filter.getIsIncludeLike()) {
                             Thread.sleep(1000);
                             if (AutoStatic.AUTOMATION.like(post.getUrl())) {
-                                runner.logMessage("Berhasil menyukai " + post.getShortcode() + " | " + currentMedia + "/" + engine.getPostList().size());
+                                this.filter.getRunnerEvents().logMessage("Berhasil menyukai " + post.getShortcode() + " | " + currentMedia + "/" + engine.getPostList().size());
                             }
                         }
                         if (AutoStatic.AUTOMATION.follow(post.getUrl())) {
-                            runner.logMessage("Berhasil mengikuti " + post.getOwner() + " | " + currentMedia + "/" + engine.getPostList().size());
+                            this.filter.getRunnerEvents().logMessage("Berhasil mengikuti " + post.getOwner() + " | " + currentMedia + "/" + engine.getPostList().size());
 
                         } else {
-                            runner.logMessage("Gagal mengikuti " + post.getOwner());
+                            this.filter.getRunnerEvents().logMessage("Gagal mengikuti " + post.getOwner());
 
                         }
                         currentMedia++;
                         long s = IntervalGenerator.followIntervalGenerator();
-                        runner.logMessage("Tunggu " + s + " detik.");
+                        this.filter.getRunnerEvents().logMessage("Tunggu " + s + " detik.");
                         Thread.sleep(s);
                     } else {
                         break;
                     }
-                } catch (InterruptedException ex) {
+                } catch (NoSuchElementException nse) {
+                    this.filter.getRunnerEvents().logMessage("Unable to do operation.");
+                    System.out.println(nse.getMessage());
+                }
+                catch(WebDriverException wbe){
+                this.filter.getRunnerEvents().logMessage("Unable to do operation.");
+                    System.out.println(wbe.getMessage());
+                
+                }
+                catch (InterruptedException ex) {
                     //    Logger.getLogger(ApplicationHomePageController.class.getName()).log(Level.SEVERE, null, ex);
-                    runner.logMessage(ex.getMessage());
-               Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
-                    dialog.showAndWait();
+                    this.filter.getRunnerEvents().logMessage(ex.getMessage());
+                    System.out.println(ex.getMessage());
+                    //Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+                    //dialog.showAndWait();
                 } catch (Exception e) {
-                    runner.logMessage(e.getMessage());
-                Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", e.getMessage());
-                    dialog.showAndWait();
+                    System.out.println(e.getMessage());
+                    this.filter.getRunnerEvents().logMessage(e.getMessage());
+                    this.filter.getRunnerEvents().onRunnerError(e.getMessage());
+//Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", e.getMessage());
+                    //dialog.showAndWait();
                 }
                 if (!running) {
                     break;
@@ -97,7 +107,7 @@ public class RunnableFollowByHashtag implements Runnable {
 
         }
 
-        runner.onRunnerDone();
+        this.filter.getRunnerEvents().onRunnerDone();
     }
 
 }
