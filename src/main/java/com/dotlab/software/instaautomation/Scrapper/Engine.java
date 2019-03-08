@@ -69,14 +69,17 @@ public abstract class Engine {
     }
 
     protected String newexec(String url) throws Exception {
-        try {
-                return new RequestMaker().run(url);
-            
 
-        } catch (java.io.IOException IOE) {
-            System.err.println(IOE.getMessage());
+        try {
+            return new RequestMaker().run(url);
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+            
+            Logger.getLogger(Engine.class.getName()).log(Level.SEVERE, null, ex);
+        throw(ex);
         }
-        return null;
+
+        
     }
 
     public ArrayList<Post> getPostList() {
