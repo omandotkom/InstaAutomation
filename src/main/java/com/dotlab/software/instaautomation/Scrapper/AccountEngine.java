@@ -60,13 +60,15 @@ public class AccountEngine extends Engine {
         //this.logger = log;
     }
 
-    public void analyzeAccount(User usertoAnalyze) throws Exception {
-        String response2 = newexec(URLGenerator.generateAccountA1(usertoAnalyze.getUsername()));
-        if (Engine.isJSONValid(response2)) {
-            AccountParser newParser = new AccountParser(response2);
-            User analyzedUser = newParser.analyzeUser();
-            followEngineSetting.getCustomRunnerInterface().onUserAnalyzed(analyzedUser);
-        }
+    public void analyzeAccount(User usertoAnalyze)throws Exception  {
+        
+            String response2 = newexec(URLGenerator.generateAccountA1(usertoAnalyze.getUsername()));
+            if (Engine.isJSONValid(response2)) {
+                AccountParser newParser = new AccountParser(response2);
+                User analyzedUser = newParser.analyzeUser();
+                followEngineSetting.getCustomRunnerInterface().onUserAnalyzed(analyzedUser);
+            }
+        
     }
 
     public ArrayList<User> getCleanFollowerList() throws Exception {
