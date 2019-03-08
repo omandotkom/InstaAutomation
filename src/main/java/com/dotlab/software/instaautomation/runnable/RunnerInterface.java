@@ -12,4 +12,5 @@ package com.dotlab.software.instaautomation.runnable;
 public interface RunnerInterface extends LoggerInterface{
     public void onRunnerDone();
     public void onRunnerStart();
+    public void onRunnerError(String errorMessage);
     }
