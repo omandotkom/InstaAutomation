@@ -9,6 +9,7 @@ import com.dotlab.software.instaautomation.UI.AutoStatic;
 import com.dotlab.software.instaautomation.UI.homepage.IntervalGenerator;
 import com.dotlab.software.instaautomation.Scrapper.Entities.Post;
 import com.dotlab.software.instaautomation.Scrapper.HashtagEngine;
+import com.dotlab.software.instaautomation.filters.LikebyHashtagFilter;
 import com.github.daytron.simpledialogfx.dialog.Dialog;
 import com.github.daytron.simpledialogfx.dialog.DialogType;
 import java.util.logging.Level;
@@ -23,12 +24,13 @@ import org.openqa.selenium.WebDriverException;
 public class RunnableLikeByHashtag implements Runnable {
 
     private boolean running;
-
-    private String hashtagInner;
-    private boolean topPost, paused;
-    int maxMedia;
+    private LikebyHashtagFilter filter;
+    //private String this.filter.getHashtag();
+    //private boolean this.filter.isTopPost(),
+    private boolean paused;
+    //int this.filter.getMaxMdia;
     /// private TextField txtLikeLog;
-    private RunnerInterface runner;
+    //private RunnerInterface runner;
 
     public boolean isPaused() {
         return this.paused;
@@ -37,23 +39,26 @@ public class RunnableLikeByHashtag implements Runnable {
     public void pause() throws InterruptedException {
         this.wait();
         this.paused = true;
-        runner.logMessage("Operasi dihentikan sementara.");
+        filter.getLikeEvent().logMessage("Operasi dihentikan sementara.");
         System.out.println("dipause");
     }
 
     public void resume() {
         this.notify();
         this.paused = false;
-        runner.logMessage("Melanjutkan operasi...");
-
+        filter.getLikeEvent().logMessage("Melanjutkan operasi...");
     }
 
-    public RunnableLikeByHashtag(String hashtagParam, int maxNum, boolean topPostParam, RunnerInterface onDo) {
-        hashtagInner = hashtagParam;
-        maxMedia = maxNum;
-        topPost = topPostParam;
+    /*public RunnableLikeByHashtag(String hashtagParam, int maxNum, boolean this.filter.isTopPost()Param, RunnerInterface onDo) {
+        this.filter.getHashtag() = hashtagParam;
+        this.filter.getMaxMdia = maxNum;
+        this.filter.isTopPost() = this.filter.isTopPost()Param;
         //this.txtLikeLog = log;
         runner = onDo;
+    }*/
+    public RunnableLikeByHashtag(LikebyHashtagFilter hs) {
+
+        this.filter = hs;
     }
 
     public boolean isRunning() {
@@ -62,21 +67,21 @@ public class RunnableLikeByHashtag implements Runnable {
 
     public void terminate() {
         running = false;
-        runner.logMessage("Menghentikan operasi like ...");
+        filter.getLikeEvent().logMessage("Menghentikan operasi like ...");
     }
 
     @Override
     public void run() {
         running = true;
-        runner.onRunnerStart();
-        runner.logMessage("Memulai operasi Like by Hashtag...");
-        runner.logMessage("Engine : #" + this.hashtagInner + " | " + this.maxMedia);
+        filter.getLikeEvent().onRunnerStart();
+        filter.getLikeEvent().logMessage("Memulai operasi Like by Hashtag...");
+        filter.getLikeEvent().logMessage("Engine : #" + this.filter.getHashtag() + " | " + this.filter.getMaxMedia());
         if (running) {
-            runner.logMessage("Mengumpulkan media...");
-            HashtagEngine engine = new HashtagEngine(hashtagInner, topPost);
-            engine.run(maxMedia);
-            runner.logMessage("Berhasil mengumpulkan " + engine.getPostList().size() + " media.");
-            runner.logMessage("Menunggu....");
+            filter.getLikeEvent().logMessage("Mengumpulkan media...");
+            HashtagEngine engine = new HashtagEngine(this.filter.getHashtag(), this.filter.isTopPost());
+            engine.run(this.filter.getMaxMedia());
+            this.filter.getLikeEvent().logMessage("Berhasil mengumpulkan " + engine.getPostList().size() + " media.");
+            this.filter.getLikeEvent().logMessage("Menunggu....");
             int currentMedia = 1;
             //ArrayList<Post> postList = engine.getPostList();
 
@@ -86,22 +91,17 @@ public class RunnableLikeByHashtag implements Runnable {
                     if (running) {
                         try {
                             if (AutoStatic.AUTOMATION.like(post.getUrl())) {
-                                runner.logMessage("Berhasil menyukai " + post.getShortcode() + " | " + currentMedia + "/" + engine.getPostList().size());
+                                this.filter.getLikeEvent().logMessage("Berhasil menyukai " + post.getShortcode() + " | " + currentMedia + "/" + engine.getPostList().size());
                             } else {
-                                runner.logMessage("Gagal menyukai " + post.getUrl());
+                                this.filter.getLikeEvent().logMessage("Gagal menyukai " + post.getUrl());
                             }
-                        }catch(WebDriverException e){
-                        System.out.println("Failed to like : " + e.getMessage());
-                        }
-                        
-                        catch (Exception ex) {
-                            Platform.runLater(new Runnable(){
-                                @Override
-                                public void run() {
-                             System.out.println("Failed to like");   
-                                    // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                                }
-                            });
+                        } catch (WebDriverException e) {
+                            System.out.println("Failed to like : " + e.getMessage());
+                            this.filter.getLikeEvent().onRunnerError(e.getMessage());
+                            throw (e);
+                            
+                        } catch (Exception ex) {
+                           this.filter.getLikeEvent().onRunnerError(ex.getMessage());
                             Logger.getLogger(RunnableLikeByHashtag.class.getName()).log(Level.SEVERE, null, ex);
                             //Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
                             //dialog.showAndWait();
@@ -114,15 +114,13 @@ public class RunnableLikeByHashtag implements Runnable {
                     }
                 } catch (InterruptedException ex) {
                     //    Logger.getLogger(ApplicationHomePageController.class.getName()).log(Level.SEVERE, null, ex);
-                    runner.logMessage(ex.getMessage());
-                    Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
-                    dialog.showAndWait();
+                    this.filter.getLikeEvent().onRunnerError(ex.getMessage());
                 }
             }
 
         }
 
-        runner.onRunnerDone();
+        this.filter.getLikeEvent().onRunnerDone();
 
     }
 }
