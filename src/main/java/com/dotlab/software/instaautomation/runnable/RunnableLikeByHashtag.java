@@ -95,12 +95,19 @@ public class RunnableLikeByHashtag implements Runnable {
                             } else {
                                 this.filter.getLikeEvent().logMessage("Gagal menyukai " + post.getUrl());
                             }
-                        } catch (WebDriverException e) {
+                        }catch (org.openqa.selenium.NoSuchElementException ne){
+                            System.out.println("Failed to like : " + ne.getMessage());
+                            this.filter.getLikeEvent().onRunnerError("Failed to like photo, check your internet connection.");
+                            //throw (ne);
+                        
+                        }
+                        catch (WebDriverException e) {
                             System.out.println("Failed to like : " + e.getMessage());
                             this.filter.getLikeEvent().onRunnerError(e.getMessage());
                             throw (e);
                             
-                        } catch (Exception ex) {
+                        }
+                        catch (Exception ex) {
                            this.filter.getLikeEvent().onRunnerError(ex.getMessage());
                             Logger.getLogger(RunnableLikeByHashtag.class.getName()).log(Level.SEVERE, null, ex);
                             //Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
