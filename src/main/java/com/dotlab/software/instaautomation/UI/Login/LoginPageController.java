@@ -36,6 +36,8 @@ import javafx.scene.control.ProgressBar;
 import javafx.stage.FileChooser;
 
 import javafx.stage.Stage;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriverException;
 
 /**
  * FXML Controller class
@@ -293,9 +295,17 @@ public class LoginPageController implements Initializable {
                 if (AutoStatic.AUTOMATION.auth(new ApplicationSettings().getUser().getUsername(), new ApplicationSettings().getUser().getPassword())) {
                     list.onLoginSuccess(user);
                 }
-            } catch (Exception ex) {
+            } catch (NoSuchElementException nse){
+            list.onLoginFailed();
+            System.out.println(nse.getMessage());
+            }
+            catch (WebDriverException wbe){
+            list.onLoginFailed();
+            System.out.println(wbe.getMessage());
+            }
+            catch (Exception ex) {
                 list.onLoginFailed();
-               
+               System.out.println(ex.getMessage());
 
             }
         }
