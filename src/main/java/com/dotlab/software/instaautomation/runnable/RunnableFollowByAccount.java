@@ -16,6 +16,7 @@ import com.github.daytron.simpledialogfx.dialog.DialogType;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.openqa.selenium.WebDriverException;
 
 /**
  *
@@ -25,6 +26,7 @@ public class RunnableFollowByAccount implements Runnable {
 
     private boolean running;
     private FollowFilter engineSetting;
+
     //private String account;
     //private CustomRunnerInterface runner;
     //private int maxFollow;
@@ -34,18 +36,15 @@ public class RunnableFollowByAccount implements Runnable {
     /*public void setMaxFollower(int max) {
         this.maxFollower = max;
     }*/
-
     public RunnableFollowByAccount(FollowFilter engineSetting) {
         this.engineSetting = engineSetting;
-       /* runner = onDo;
+        /* runner = onDo;
         this.maxFollow = max;
         this.account = account;*/
     }
 
     public RunnableFollowByAccount() {
     }
-
-    
 
     public Boolean isRunning() {
         return this.running;
@@ -73,18 +72,18 @@ public class RunnableFollowByAccount implements Runnable {
                 engineSetting.getCustomRunnerInterface().logMessage("Berhasil mengumpulkan " + userList.size() + " pengikut.");
                 engineSetting.getCustomRunnerInterface().logMessage("Menunggu....");
                 int currentMedia = 1;
-                
+
                 for (int i = 0; i < userList.size(); i++) {
-                    
+
                     try {
                         if (running) {
-                            
+
                             if (AutoStatic.AUTOMATION.followByUsername(URLGenerator.generateProfileURL(userList.get(i).getUsername()))) {
                                 engineSetting.getCustomRunnerInterface().logMessage("Berhasil mengikuti " + userList.get(i).getUsername() + "(" + userList.get(i).getFullname() + ") | " + currentMedia + "/" + userList.size());
-                                
+
                             } else {
                                 engineSetting.getCustomRunnerInterface().logMessage("Gagal mengikuti " + userList.get(i).getUsername());
-                                
+
                             }
                             currentMedia++;
                             long s = IntervalGenerator.followIntervalGenerator();
@@ -93,24 +92,38 @@ public class RunnableFollowByAccount implements Runnable {
                         } else {
                             break;
                         }
+                    } catch (org.openqa.selenium.NoSuchElementException ne) {
+                        System.out.println("Failed to like : " + ne.getMessage());
+                        engineSetting.getCustomRunnerInterface().onRunnerError("Failed to follow account, please check your connection.");
+//this.filter.getLikeEvent().onRunnerError("Failed to like photo, check your internet connection.");
+                        //throw (ne);
+
+                    } catch (WebDriverException e) {
+                        System.out.println(e.getMessage());
+                        engineSetting.getCustomRunnerInterface().onRunnerError("Failed to follow account, please check your connection.");
                     } catch (InterruptedException ex) {
+                        System.out.println(ex.getMessage());
                         //    Logger.getLogger(ApplicationHomePageController.class.getName()).log(Level.SEVERE, null, ex);
                         engineSetting.getCustomRunnerInterface().logMessage(ex.getMessage());
-                        Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
-                        dialog.showAndWait();
+                        engineSetting.getCustomRunnerInterface().onRunnerError(ex.getMessage());
+                        //       Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+                        //     dialog.showAndWait();
                     } catch (Exception e) {
+                        System.out.println(e.getMessage());
                         engineSetting.getCustomRunnerInterface().logMessage(e.getMessage());
-                        Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", e.getMessage());
-                        dialog.showAndWait();
+                        engineSetting.getCustomRunnerInterface().onRunnerError(e.getMessage());
+                        //   Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", e.getMessage());
+                        // dialog.showAndWait();
                     }
                     if (!running) {
                         break;
                     }
                 }
             } catch (Exception ex) {
+                engineSetting.getCustomRunnerInterface().onRunnerError(ex.getMessage());
                 Logger.getLogger(RunnableFollowByAccount.class.getName()).log(Level.SEVERE, null, ex);
-             Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
-                    dialog.showAndWait();
+                /*Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+                dialog.showAndWait();*/
             }
 
         }
