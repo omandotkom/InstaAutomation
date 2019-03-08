@@ -13,6 +13,7 @@ import com.dotlab.software.instaautomation.runnable.RunnerInterface;
 import com.dotlab.software.instaautomation.UI.Shutdown;
 import com.dotlab.software.instaautomation.filters.CleanerFilter;
 import com.dotlab.software.instaautomation.filters.FollowFilter;
+import com.dotlab.software.instaautomation.filters.FollowbyHashtagFilter;
 import com.dotlab.software.instaautomation.runnable.CustomRunnerInterface;
 import com.dotlab.software.instaautomation.runnable.RunnableCleaner;
 import com.dotlab.software.instaautomation.runnable.RunnableFollowByAccount;
@@ -144,6 +145,64 @@ public class FollowModuleController implements Initializable {
     @FXML
     private Label lblTotalAccount;
 
+    private CustomRunnerInterface generateFollowByHashtagEvents() {
+        CustomRunnerInterface cri = new CustomRunnerInterface() {
+            @Override
+            public void onUserListAdded(ArrayList<User> userList) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onUserSuccessfullyFiltered(User user) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onUserAnalyzed(User user) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onRunnerDone() {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                logMessage("Operasi follow by hashtag selesai");
+                btnFollowBerhentiHashtag.setDisable(true);
+                btnFollowMulaiHashtag.setDisable(false);
+                isEngineRunning = false;
+                if (rbThreadShutdown.isSelected()) {
+                    logMessage("Mematikan komputer dalam 1 menit.");
+                    Shutdown.shtdown();
+                }
+
+            }
+
+            @Override
+            public void onRunnerStart() {
+                loggerApp("Pencarian media berdasarkan hashtag " + txtFollowHashtag.getText(), "FOLLOW_BY_HASHTAG");
+
+                isEngineRunning = true;
+
+//throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onRunnerError(String errorMessage) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                loggerApp("Error : \n" + errorMessage,FOLLOW_BY_HASHTAG);
+
+            }
+
+            @Override
+            public void logMessage(String message) {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                loggerApp(message, FOLLOW_BY_HASHTAG);
+
+            }
+
+        };
+        return cri;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -159,37 +218,14 @@ public class FollowModuleController implements Initializable {
                     if (!txtJumlahFollowHashtag.getText().isEmpty()) {
                         //hashtag dan jumlah foto sudah di tentukan
                         try {
-
+                            FollowbyHashtagFilter filter = new FollowbyHashtagFilter();
+                            filter.setHashtagInner(txtFollowHashtag.getText());
+                            filter.setMaxFollow(Integer.valueOf(txtJumlahFollowHashtag.getText()));
+                            filter.setRunnerEvents(generateFollowByHashtagEvents());
+                            filter.setIsIncludeLike(checkLikeHashtag.isSelected());
                             //run = new RunnableHashtag(txtHashtag.getText(), Integer.valueOf(txtJumlahFoto.getText()), checkLikeTopPost.isSelected());
-                            runnablefbh = new RunnableFollowByHashtag(txtFollowHashtag.getText(), Integer.valueOf(txtJumlahFollowHashtag.getText()), new RunnerInterface() {
-                                @Override
-                                public void onRunnerDone() {
-                                    logMessage("Operasi follow by hashtag selesai");
-                                    btnFollowBerhentiHashtag.setDisable(true);
-                                    btnFollowMulaiHashtag.setDisable(false);
-                                    isEngineRunning = false;
-                                    if (rbThreadShutdown.isSelected()) {
-                                        logMessage("Mematikan komputer dalam 1 menit.");
-                                        Shutdown.shtdown();
-                                    }
-
-                                }
-
-                                @Override
-                                public void logMessage(String message) {
-                                    logger(message, FOLLOW_BY_HASHTAG);
-                                }
-
-                                @Override
-                                public void onRunnerStart() {
-                                    isEngineRunning = true;
-
-                                }
-
-                            }, checkLikeHashtag.isSelected());
+                            runnablefbh = new RunnableFollowByHashtag(filter);
                             Thread runner = new Thread(runnablefbh);
-
-                            logger("Pencarian media berdasarkan hashtag " + txtFollowHashtag.getText(), "FOLLOW_BY_HASHTAG");
                             txtFollowLogHashtag.clear();
                             runner.start();
                             //btnLikeMulai.setText("Berhenti");
@@ -213,7 +249,7 @@ public class FollowModuleController implements Initializable {
 
     }
 
-    private void logger(String logMessage, String logType) {
+    private void loggerApp(String logMessage, String logType) {
         Platform.runLater(() -> {
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
@@ -245,6 +281,79 @@ public class FollowModuleController implements Initializable {
         }
     }
 
+    private CustomRunnerInterface FollowMulaiAccountonActionInterface() {
+        CustomRunnerInterface intf = new CustomRunnerInterface() {
+            @Override
+            public void onUserListAdded(ArrayList<User> userList) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                ObservableList<String> items = (ObservableList<String>) listViewAkun.getItems();
+                userList.forEach((u) -> {
+                    items.add(u.getUsername());
+                });
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        totalScraped.setText(String.valueOf(userList.size()));
+
+                    }
+                });
+            }
+
+            @Override
+            public void onUserSuccessfullyFiltered(User user) {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                currentAccountAmount++;
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        lblTotalAccount.setText(String.valueOf(currentAccountAmount) + " | terakhir ditambahkan : " + user.getUsername());
+
+                    }
+                });
+            }
+
+            @Override
+            public void onUserAnalyzed(User user) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onRunnerDone() {
+                logMessage("Operasi follow by follower selesai");
+                btnFollowBerhentiAccount.setDisable(true);
+                btnFollowMulaiAccount.setDisable(false);
+                isEngineRunning = false;
+                if (rbThreadShutdown.isSelected()) {
+                    logMessage("Mematikan komputer dalam 1 menit.");
+                    Shutdown.shtdown();
+                }
+//    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onRunnerStart() {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                isEngineRunning = true;
+                currentAccountAmount = 0;
+            }
+
+            @Override
+            public void onRunnerError(String errorMessage) {
+                loggerApp("Error : \n "+ errorMessage, FollowModuleController.FOLLOW_BY_ACCOUNT);
+  
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void logMessage(String message) {
+                //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                loggerApp(message, FollowModuleController.FOLLOW_BY_ACCOUNT);
+
+            }
+        };
+        return intf;
+    }
+
     @FXML
     private void btnFollowMulaiAccountonAction(ActionEvent event) {
         if (!txtFollowAccount.getText().isEmpty()) {
@@ -260,70 +369,15 @@ public class FollowModuleController implements Initializable {
                     engineSetting.setJumlahFollow(Integer.valueOf(txtJumlahFollowAccount.getText()));
 
                     engineSetting.setTargetAccount(txtFollowAccount.getText());
-                    engineSetting.setCustomRunnerInterface(new CustomRunnerInterface() {
-                        @Override
-                        public void onUserListAdded(ArrayList<User> userList) {
-                            ObservableList<String> items = (ObservableList<String>) listViewAkun.getItems();
-                            userList.forEach((u) -> {
-                                items.add(u.getUsername());
-                            });
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    totalScraped.setText(String.valueOf(userList.size()));
-
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onRunnerDone() {
-                            logMessage("Operasi follow by follower selesai");
-                            btnFollowBerhentiAccount.setDisable(true);
-                            btnFollowMulaiAccount.setDisable(false);
-                            isEngineRunning = false;
-                            if (rbThreadShutdown.isSelected()) {
-                                logMessage("Mematikan komputer dalam 1 menit.");
-                                Shutdown.shtdown();
-                            }
-
-                        }
-
-                        @Override
-                        public void onRunnerStart() {
-                            isEngineRunning = true;
-                            currentAccountAmount = 0;
-                        }
-
-                        @Override
-                        public void logMessage(String message) {
-                            logger(message, FollowModuleController.FOLLOW_BY_ACCOUNT);
-                        }
-
-                        @Override
-                        public void onUserSuccessfullyFiltered(User user) {
-                            currentAccountAmount++;
-                            Platform.runLater(new Runnable() {
-                                @Override
-                                public void run() {
-                                    lblTotalAccount.setText(String.valueOf(currentAccountAmount) + " | terakhir ditambahkan : " + user.getUsername());
-
-                                }
-                            });
-                        }
-
-                        @Override
-                        public void onUserAnalyzed(User user) {
-
-                        }
-                    });
+                    engineSetting.setCustomRunnerInterface(FollowMulaiAccountonActionInterface());
+                    engineSetting.setCustomRunnerInterface(FollowMulaiAccountonActionInterface());
                     if (checkSettingMaxFollowerAccount.isSelected()) {
                         engineSetting.setMaxFollowerofAnAccount(maxFollower);
                     }
                     runnablefba = new RunnableFollowByAccount(engineSetting);
                     Thread runner = new Thread(runnablefba);
 
-                    logger("Pencarian akun berdasarkan follower " + txtFollowHashtag.getText(), FollowModuleController.FOLLOW_BY_ACCOUNT);
+                    loggerApp("Pencarian akun berdasarkan follower " + txtFollowHashtag.getText(), FollowModuleController.FOLLOW_BY_ACCOUNT);
                     txtFollowByAccountLog.clear();
                     runner.start();
                     //btnLikeMulai.setText("Berhenti");
@@ -348,43 +402,13 @@ public class FollowModuleController implements Initializable {
 
     @FXML
     private void checkFollowAccountAllonAction(ActionEvent event) {
+
         if (checkFollowAccountAll.isSelected()) {
             txtJumlahFollowAccount.setText("");
             txtJumlahFollowAccount.setDisable(true);
             FollowFilter filter = new FollowFilter();
-            filter.setCustomRunnerInterface(new CustomRunnerInterface() {
-                @Override
-                public void onUserListAdded(ArrayList<User> userList) {
-                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
+            filter.setCustomRunnerInterface(this.generateCustomRunnerInterface());
 
-                @Override
-                public void onUserSuccessfullyFiltered(User user) {
-                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public void onUserAnalyzed(User user) {
-                    //     throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                    txtJumlahFollowAccount.setText(String.valueOf(user.getFollowerCount()));
-
-                }
-
-                @Override
-                public void onRunnerDone() {
-                    //   throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public void onRunnerStart() {
-                    // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-
-                @Override
-                public void logMessage(String message) {
-                    //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-                }
-            });
             Runnable run = new Runnable() {
                 @Override
                 public void run() {
@@ -394,8 +418,18 @@ public class FollowModuleController implements Initializable {
                         u.setUsername(txtFollowAccount.getText());
                         engine.analyzeAccount(u);
                     } catch (Exception ex) {
-                     Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
-                    dialog.showAndWait();
+                        loggerApp(ex.getMessage(),FollowModuleController.FOLLOW_BY_ACCOUNT);
+                        
+                        Platform.runLater(new Runnable(){
+                            @Override
+                            public void run() {
+                        //        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                          Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+                        dialog.showAndWait();
+                            }
+                        });
+                        
+                        
                     }
                 }
 
@@ -439,14 +473,53 @@ public class FollowModuleController implements Initializable {
         txtAccountCleaner.setText(AutoStatic.LOGGED_USER.getUsername());
     }
 
-    @FXML
-    private void btnMulaiCleaneronAction(ActionEvent event) {
-        CleanerFilter filter = new CleanerFilter();
-        filter.setUser(AutoStatic.LOGGED_USER);
-        filter.setCustomRunnerInterface(new CustomRunnerInterface() {
+    private CustomRunnerInterface generateCustomRunnerInterface() {
+        CustomRunnerInterface cri = new CustomRunnerInterface() {
             @Override
             public void onUserListAdded(ArrayList<User> userList) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
 
+            @Override
+            public void onUserSuccessfullyFiltered(User user) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onUserAnalyzed(User user) {
+//                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+           txtJumlahFollowAccount.setText(String.valueOf(user.getFollowerCount()));
+            }
+
+            @Override
+            public void onRunnerDone() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onRunnerStart() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onRunnerError(String errorMessage) {
+loggerApp(errorMessage,FollowModuleController.FOLLOW_BY_ACCOUNT);                
+//throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void logMessage(String message) {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+        };
+        return cri;
+    }
+
+    private CustomRunnerInterface generateCleanerInterface() {
+        CustomRunnerInterface ine = new CustomRunnerInterface() {
+            @Override
+            public void onUserListAdded(ArrayList<User> userList) {
+                //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
@@ -461,30 +534,50 @@ public class FollowModuleController implements Initializable {
 
             @Override
             public void onUserSuccessfullyFiltered(User user) {
+                //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
                 userList.add(user);
                 nameList.add(user.getUsername());
-            }
 
-            @Override
-            public void onRunnerDone() {
-                //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void onRunnerStart() {
-                //  throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-            }
-
-            @Override
-            public void logMessage(String message) {
-                logger(message, FollowModuleController.CLEANER);
             }
 
             @Override
             public void onUserAnalyzed(User user) {
                 throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
             }
-        });
+
+            @Override
+            public void onRunnerDone() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onRunnerStart() {
+                throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+            }
+
+            @Override
+            public void onRunnerError(String errorMessage) {
+                //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                loggerApp("Error : \n " + errorMessage, FollowModuleController.CLEANER);
+
+            }
+
+            @Override
+            public void logMessage(String message) {
+                // throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                loggerApp(message, FollowModuleController.CLEANER);
+
+            }
+
+        };
+        return ine;
+    }
+
+    @FXML
+    private void btnMulaiCleaneronAction(ActionEvent event) {
+        CleanerFilter filter = new CleanerFilter();
+        filter.setUser(AutoStatic.LOGGED_USER);
+        filter.setCustomRunnerInterface(generateCleanerInterface());
         RunnableCleaner cleaner = new RunnableCleaner(filter);
         Thread t = new Thread(cleaner);
         t.start();
@@ -498,8 +591,8 @@ public class FollowModuleController implements Initializable {
             AutoStatic.AUTOMATION.unfollow("https://www.instagram.com/chasingclaudia/");
         } catch (Exception ex) {
             Logger.getLogger(FollowModuleController.class.getName()).log(Level.SEVERE, null, ex);
-        Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
-                    dialog.showAndWait();
+            Dialog dialog = new Dialog(DialogType.ERROR, "Kesalahan", ex.getMessage());
+            dialog.showAndWait();
         }
     }
 
