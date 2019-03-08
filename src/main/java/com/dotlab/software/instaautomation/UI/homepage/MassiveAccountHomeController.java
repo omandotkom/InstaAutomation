@@ -110,7 +110,9 @@ public class MassiveAccountHomeController implements Initializable {
     @FXML
     private void btnMulaiAction(ActionEvent event) {
         
-     if (checkAutoName.isSelected()) {
+     
+    }
+/*if (checkAutoName.isSelected()) {
             RunnableGenerateName rn = new RunnableGenerateName(emailCount,new RunnerInterface(){
                 @Override
                 public void onRunnerDone() {
@@ -130,7 +132,5 @@ public class MassiveAccountHomeController implements Initializable {
             },txtPathEmail.getText());
             Thread runner = new Thread(rn);
             runner.start();
-        }
-    }
-
+        }*/
 }
