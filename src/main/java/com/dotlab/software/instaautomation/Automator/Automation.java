@@ -60,23 +60,23 @@ public class Automation {
         return driver;
     }
 
-    public Automation(){
+    public Automation() {
         try {
             System.setProperty("webdriver.chrome.driver", new ApplicationSettings().getChromeDriverPath());
             ChromeOptions options = new ChromeOptions();
             //headless support
-            options.addArguments("headless");
+            //options.addArguments("headless");
             options.addArguments("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
             driver = new ChromeDriver(options);
         } catch (IOException ex) {
-        
+
             Logger.getLogger(Automation.class.getName()).log(Level.SEVERE, null, ex);
         } catch (URISyntaxException ex) {
             Logger.getLogger(Automation.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    public void register(String name, String username, String email) throws Exception{
+    public void register(String name, String username, String email) throws Exception {
         driver.get("https://www.instagram.com/accounts/emailsignup/");
         WebElement usernameElement = driver.findElement(By.name("username"));
         WebElement passwordElement = driver.findElement(By.name("password"));
@@ -100,32 +100,33 @@ public class Automation {
         driver.manage().timeouts().implicitlyWait(duration, TimeUnit.SECONDS);
     }
 
-    public Boolean auth(String user, String pass) throws Exception,InterruptedException{
+    public Boolean auth(String user, String pass) throws WebDriverException, Exception, InterruptedException {
         Boolean returnVar = true;
-            System.out.println("Authentication started...");
-            driver.manage().window().maximize();
-            driver.get("https://m.instagram.com/accounts/login/?source=auth_switcher");
+        System.out.println("Authentication started...");
+  
+        driver.manage().window().maximize();
+        driver.get("https://m.instagram.com/accounts/login/?source=auth_switcher");
 
-            // Find the text input element by its name
-            //driver.get("https://www.instagram.com/omandotkom.jpg");
-            WebElement username = driver.findElement(By.name("username"));
-            WebElement password = driver.findElement(By.name("password"));
+        // Find the text input element by its name
+        //driver.get("https://www.instagram.com/omandotkom.jpg");
+        WebElement username = driver.findElement(By.name("username"));
+        WebElement password = driver.findElement(By.name("password"));
 
-            // Enter something to search for
-            username.sendKeys(user);
-            password.sendKeys(pass);
+        // Enter something to search for
+        username.sendKeys(user);
+        password.sendKeys(pass);
 
-            // Now submit the form. WebDriver will find the form for us from the element
-            Thread.sleep(2000);
-            password.submit();
+        // Now submit the form. WebDriver will find the form for us from the element
+        Thread.sleep(2000);
+        password.submit();
 
-            WebDriverWait wait = new WebDriverWait(driver, 300);
-            wait.until(ExpectedConditions.titleIs("Instagram"));
-            if (driver.manage().getCookieNamed("ds_user_id") == null) {
-                returnVar = false;
-            }
-            //Cookie cok = driver.manage().getCookieNamed("sessionid");
-     
+        WebDriverWait wait = new WebDriverWait(driver, 300);
+        wait.until(ExpectedConditions.titleIs("Instagram"));
+        if (driver.manage().getCookieNamed("ds_user_id") == null) {
+            returnVar = false;
+        }
+        //Cookie cok = driver.manage().getCookieNamed("sessionid");
+
         return returnVar;
     }
 
@@ -144,15 +145,14 @@ public class Automation {
             String time = dtf.format(now);
             System.out.println("(" + time + ") Successfully like " + url);
             result = true;
-        
-        }catch(WebDriverException e){
-         System.err.println("Error " + url);
+
+        } catch (WebDriverException e) {
+            System.err.println("Error " + url);
             result = false;
-            throw(e);    
-        }
-         catch (Exception e) {
+            throw (e);
+        } catch (Exception e) {
             result = false;
-            throw(e);
+            throw (e);
         }
         return result;
     }
@@ -244,16 +244,16 @@ public class Automation {
             element.click();
             result = true;
 
-        } catch (org.openqa.selenium.NoSuchElementException nse) {
+        } catch (WebDriverException e) {
             System.err.println("Error " + url);
-            System.err.println(nse.getMessage());
+            System.err.println(e.getMessage());
             result = false;
-            throw(nse);
+            throw (e);
         } catch (Exception e) {
             result = false;
             System.err.println("Error " + url);
             System.err.println(e.getMessage());
-        throw(e);
+            throw (e);
         }
         return result;
     }
@@ -274,13 +274,14 @@ public class Automation {
             String time = dtf.format(now);
             result = true;
             System.out.print("Follow success.");
-        } catch (org.openqa.selenium.NoSuchElementException nse) {
+        } catch (WebDriverException exx) {
             System.err.println("Error " + url);
             result = false;
-            throw(nse);
+            throw (exx);
+
         } catch (Exception e) {
             result = false;
-            throw(e);
+            throw (e);
         }
         return result;
     }
