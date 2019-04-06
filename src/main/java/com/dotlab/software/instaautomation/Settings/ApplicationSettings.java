@@ -8,29 +8,15 @@ package com.dotlab.software.instaautomation.Settings;
 import com.dotlab.software.instaautomation.Reporter.CSVReport;
 import java.util.prefs.*;
 import com.dotlab.software.instaautomation.Scrapper.Entities.User;
-import com.dotlab.software.instaautomation.Scrapper.Parser.ConfigParser;
-import java.io.BufferedReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.FileReader;
-
-import com.dotlab.software.instaautomation.Scrapper.Parser.ConfigParser;
-import java.io.FileWriter;
-import java.io.RandomAccessFile;
 import java.net.URISyntaxException;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
-import java.nio.channels.OverlappingFileLockException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.apache.commons.lang3.SystemUtils;
 
-import org.apache.tika.Tika;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  *
@@ -42,7 +28,7 @@ public class ApplicationSettings {
     private final String PREF_PASSORD = "password";
     private final String PREF_CHROMEDRIVERPATH = "chrome_driver_path";
     private final String PREF_CONFIG_PATH = "config";
-
+    private final String PREF_HEADLESS = "headless";
     private final String PREF_LIKE_INTERVAL = "likeInterval";
     private final String PREF_COMMENT_INTERVAL = "commentInterval";
     private final String PREF_FOLLOW_INTERVAL = "followInterval";
@@ -57,7 +43,13 @@ public class ApplicationSettings {
         prefs.put(PREF_USERNAME, user.getUsername());
         prefs.put(PREF_PASSORD, user.getPassword());
     }
-
+    public void saveHeadless(boolean val){
+    prefs.putBoolean(PREF_HEADLESS, val);
+    }
+    public boolean getHeadless(){
+        //default not headless
+    return prefs.getBoolean(PREF_HEADLESS, false);
+    }
     public void saveLikeInterval(String likeInterval) {
         prefs.put(PREF_LIKE_INTERVAL, likeInterval);
     }
