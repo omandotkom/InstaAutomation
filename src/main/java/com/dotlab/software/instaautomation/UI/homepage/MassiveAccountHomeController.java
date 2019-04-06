@@ -5,12 +5,6 @@
  */
 package com.dotlab.software.instaautomation.UI.homepage;
 
-import com.dotlab.software.instaautomation.Settings.ApplicationSettings;
-import com.dotlab.software.instaautomation.Settings.Config;
-import com.dotlab.software.instaautomation.UI.MessagePopup;
-import com.dotlab.software.instaautomation.runnable.RunnerInterface;
-import com.dotlab.software.instaautomation.runnable.RunnableGenerateName;
-import java.io.File;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -22,10 +16,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.stage.FileChooser;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import javafx.application.Platform;
 import javafx.scene.control.TextArea;
 
