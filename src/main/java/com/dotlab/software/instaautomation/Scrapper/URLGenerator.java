@@ -67,5 +67,9 @@ public class URLGenerator {
         builder.append("/?hl=en");
         return builder.toString();
     }
-
+    
+    public static String generateConfigURL(){
+    String url = "https://raw.githubusercontent.com/omandotkom/InstaAutomationPublicConfig/master/config.json";
+    return url;
+    }
 }
