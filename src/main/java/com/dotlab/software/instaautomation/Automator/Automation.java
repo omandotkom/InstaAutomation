@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 
 import com.dotlab.software.instaautomation.Settings.ApplicationSettings;
 import com.dotlab.software.instaautomation.UI.AutoStatic;
+
 import com.github.daytron.simpledialogfx.dialog.Dialog;
 import com.github.daytron.simpledialogfx.dialog.DialogType;
 import java.io.IOException;
@@ -38,6 +39,9 @@ import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriverException;
+import org.openqa.selenium.JavascriptExecutor;
+
+
 
 /**
  *
@@ -46,6 +50,9 @@ import org.openqa.selenium.WebDriverException;
 public class Automation {
 
     private static WebDriver driver;
+    public final String LOGIN_STATUS_FUCKED = "FUCKED_UP";
+    public final String LOGIN_STATUS_SUCCESS = "LOGIN_SUCCESS";
+    //private final String LOGIN_STATUS_FAILED = "LOGIN_FAILED";
 
     private void setDriver(WebDriver driver) {
         //System.setProperty("webdriver.chrome.driver", new ApplicationSettings().getChromeDriverPath());
@@ -65,7 +72,11 @@ public class Automation {
             System.setProperty("webdriver.chrome.driver", new ApplicationSettings().getChromeDriverPath());
             ChromeOptions options = new ChromeOptions();
             //headless support
-            options.addArguments("headless");
+            if (new ApplicationSettings().getHeadless()) {
+                //jika headless
+                options.addArguments("headless");
+            }
+
             options.addArguments("Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/60.0.3112.113 Safari/537.36");
             driver = new ChromeDriver(options);
         } catch (IOException ex) {
@@ -99,11 +110,22 @@ public class Automation {
     public void sleep(long duration) {
         driver.manage().timeouts().implicitlyWait(duration, TimeUnit.SECONDS);
     }
+    public String fuckedStateCheck(){
+    if (driver.manage().getCookieNamed("ds_user_id") == null) {
+            //this is fucked up condition when instagram blocks the login form,
+            //shit this happens again.
 
-    public Boolean auth(String user, String pass) throws WebDriverException, Exception, InterruptedException {
-        Boolean returnVar = true;
+            System.out.println("Login failed, verification step needed");
+            return this.LOGIN_STATUS_FUCKED;
+        } else {
+            //success
+            return this.LOGIN_STATUS_SUCCESS;
+        }
+    }
+    public String auth(String user, String pass) throws WebDriverException, Exception, InterruptedException {
+        //Boolean returnVar = true;
         System.out.println("Authentication started...");
-  
+
         driver.manage().window().maximize();
         driver.get("https://m.instagram.com/accounts/login/?source=auth_switcher");
 
@@ -123,11 +145,17 @@ public class Automation {
         WebDriverWait wait = new WebDriverWait(driver, 300);
         wait.until(ExpectedConditions.titleIs("Instagram"));
         if (driver.manage().getCookieNamed("ds_user_id") == null) {
-            returnVar = false;
+            //this is fucked up condition when instagram blocks the login form,
+            //shit this happens again.
+
+            System.out.println("Login failed, verification step needed");
+            return this.LOGIN_STATUS_FUCKED;
+        } else {
+            //success
+            return this.LOGIN_STATUS_SUCCESS;
         }
         //Cookie cok = driver.manage().getCookieNamed("sessionid");
 
-        return returnVar;
     }
 
     public Boolean like(String url) {
@@ -139,6 +167,9 @@ public class Automation {
         try {
             this.scrollDown();
             WebElement button = driver.findElement(By.className(AutoStatic.SETTINGS.getLikeButton()));
+            //WebElement button  = driver.findElement(By.cssSelector(".FY9nT > button:nth-child(1) > span:nth-child(1)"));
+            //WebElement button = driver.findElement(By.className("dCJp8"));
+            
             button.click();
             DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
             LocalDateTime now = LocalDateTime.now();
