@@ -97,7 +97,7 @@ public class RunnableLikeByHashtag implements Runnable {
                             }
                         }catch (org.openqa.selenium.NoSuchElementException ne){
                             System.out.println("Failed to like : " + ne.getMessage());
-                            this.filter.getLikeEvent().onRunnerError("Failed to like photo, check your internet connection.");
+                            this.filter.getLikeEvent().onRunnerError("Failed to like photo. Error L-1A\nplease renew the like setting or report to omandotkom@gmail.com");
                             //throw (ne);
                         
                         }
