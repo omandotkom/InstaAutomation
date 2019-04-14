@@ -12,6 +12,7 @@
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/Automator/Automation.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/UI/homepage/ApplicationHomePageController.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/UI/homepage/configuration/LikeModuleConfigurationController.java
+/home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/filters/LikebyHashtagFilter.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/Database/ActivityWritter.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/filters/FollowFilter.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/runnable/LoggerInterface.java
@@ -25,12 +26,14 @@
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/runnable/RunnableCleaner.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/Scrapper/Parser/HashtagParser.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/MAINRANDOM.java
+/home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/UI/Login/SampleD.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/Settings/Config.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/Reporter/CSVReport.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/Scrapper/Entities/Post.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/UI/MainFX.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/runnable/RunnableFollowByHashtag.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/Scrapper/CommentScrapper.java
+/home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/filters/FollowbyHashtagFilter.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/runnable/CustomRunnerInterface.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/MAIN.java
 /home/omandotkom/Pemrograman/Java/NetBeansProjects/InstaAutomation/src/main/java/com/dotlab/software/instaautomation/Scrapper/HashtagEngine.java

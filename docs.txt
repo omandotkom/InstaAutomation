@@ -1,0 +1,34 @@
+Jadi gini man, intro dulu. Tadinya projek ini idenya milik software developer (gabisa gw sebutin namanya) dan terletak di bandung. Gw kerja sama dia secara remote. Gw yang nulis softwarenya dari 0 baris kode sampai jadi software puluhan mb gini. 
+
+Nama softwarenya InstaAutomation, software ini udah dipake sama banyak orang dan yang terakhir pesen itu sebuah game developer buat meningkatkan engagement instagramnya. Jadi apa fungsi software ini ? fungsinya buat ngendaliin akun lu supaya aktif tanpa lu kendaliin manual.
+
+ini gw copasin ya Question/Answer dari dokumentasinya.
+
+Q : Kenapa harus software ini ?
+A : Karena biar otomatis, bayangkan misalkan Anda harus me like foto berdasarkan hashtag #photography sebanyak 1200 foto, apakah gak lelah ? belum lagi ada beberapa resiko seperti 
+*1. Di blokir instagram karena terlalu cepet.*
+*2. Melelahkan, lebih lagi untuk follow sambil ngelike ribuan foto/akun* 
+*3. Waktu terbuang sia-sia, bisa digunakan untuk hal lain.*
+
+Q : Apa aja fitur yang sudah ada ?
+A : Sejauh ini udah ada fitur
+1. Like foto berdasarkan hashtag.
+2. Like foto berdasarkan lokasi (next update).
+3. Follow akun berdasarkan hashtag dilengkapi fitur filter dan deteksi akun fake/bot.
+4. Like foto berdasarkan hashtag lalu memfollow akunnya.
+
+Q : Bagaimana "membersihkan akun yang di follow jika sudah terlalu banyak ? "
+A : Bisa pakai tool di Android/iPhone seperti InstaCop atau sebagaiya, atau bisa juga unfollow manual dari Instagram hp Anda.
+
+Q : Apakah software ini aman ? 
+A : Aman, karna data apapun tidak akan direkam oleh software ini, hanya username & password dan itupun hanya di simpan di komputer lokal, tidak dikirim ke manapun.
+
+Q : Kenapa tidak versi web-based ?
+A : Karena alasan keamanan, sudah banyak kasus bot instagram versi web, lalu webnya di hack dan username serta passwordnya diambil hacker. Karena walaupun di enkripsi di web, maka akan harus di dekripsi dengan private key yang tentunya disimpan dalam bentuk hard-coded web. Dengan sistem desktop-based ini, semua data cuma ada di komputer pengguna.
+
+Q : Apakah ada batasan software ini ?
+A : Ada, browser yang digunakan harus Google Chrome
+
+Q : Bisa berjalan di sistem operasi apa saja ?
+A : Windows, Linux, Mac bahkan mini computer pun bisa.
+

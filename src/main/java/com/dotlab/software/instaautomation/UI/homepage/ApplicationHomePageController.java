@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.Menu;
 import javafx.scene.control.RadioMenuItem;
@@ -43,9 +44,11 @@ public class ApplicationHomePageController implements Initializable {
     @FXML
     private ImageView imgLogo;
     @FXML
-    private Button btnMassiveAccount;
-    @FXML
     private Button btnMassiveAccount1;
+    @FXML
+    private Label lblNetworkPing;
+    @FXML
+    private Button btnPinger;
 
     /**
      * Initializes the controller class.
@@ -131,6 +134,10 @@ public class ApplicationHomePageController implements Initializable {
           Dialog dialog = new Dialog(DialogType.ERROR,"Fungsi tidak di dukung.","Fitur yang Anda minta sedang dalam tahap pengembangan.");
       dialog.showAndWait();
 
+    }
+
+    @FXML
+    private void btnPingeronAction(ActionEvent event) {
     }
 
 }
